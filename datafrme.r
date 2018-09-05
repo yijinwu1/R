@@ -8,6 +8,10 @@ theDF <- data.frame(x,y,q)
 theDF <- data.frame(First=x,Second=y,Sport=q)
 View(theDF)
 
+theDF1 <- data.frame(First=x,Second=y,Sport=q,stringsAsFactors = FALSE) #character no factor
+theDF$Sport
+theDF1$Sport
+
 #column number
 ncol(theDF)
 #column name
