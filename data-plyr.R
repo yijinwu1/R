@@ -1,3 +1,18 @@
+#plyr
+# function |   input             |    output           |
+#   ddply  | data.frame          | data.frame          | 
+#   llply  | list                | list                |
+#   aaply  | array/vector/matrix | array/vector/matrix |
+#   dlply  | data.frame          | list                |
+#   d_ply  | data.frame          | array/vector/matrix |
+#   daply  | data.frame          |                     |
+#   ldply  | list                | data.frame          |
+#   laply  | list                | array/vector/matrix |
+#   l_ply  | list                |                     |
+#   adply  | array/vector/matrix | data.frame          |
+#   alply  | array/vector/matrix | list                |
+#   a_ply  | array/vector/matrix |                     |
+
 install.packages("plyr")
 library(plyr)
 
