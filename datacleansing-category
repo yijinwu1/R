@@ -1,5 +1,7 @@
 install.packages("readx1")
 library(readxl) #user excel_sheets(), read_excel()
+#download.file(url='https://github.com/yijinwu1/R/tree/master/excel/RamenShop.xlsx',destfile='C:/Users/wuyijin/Desktop/RamenShop.xlsx')
+
 excel_sheets('C:/Users/wuyijin/Desktop/RamenShop.xlsx') #sheet name. note file path.
 uniform <- read_excel('C:/Users/wuyijin/Desktop/RamenShop.xlsx',sheet = "新制服",col_names = TRUE,range=cell_cols("A:B"))
 View(uniform) 
