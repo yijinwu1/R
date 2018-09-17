@@ -21,6 +21,10 @@ summary(oldprice) #Min,1st Qu,Mean,3rd Qu,Max
 ('M-3' <- meanprice - 3*sdprice) # mean - 3*sd 
 ('M+3' <- meanprice + 3*sdprice) # mean + 3*sd
 
+(varprice <- var(oldprice,na.rm = TRUE)) #變異數
+(sqrt(varprice)) #變異數開根號
+(quantile(oldprice,probs=c(0.25,0.75),na.rm = TRUE)) # first and third quantile
+
 # NumericalData use Stem-and-Leaf Graph
 stem(oldprice)
 
