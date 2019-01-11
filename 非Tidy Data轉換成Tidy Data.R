@@ -2,7 +2,8 @@
 #  1.每個變數(variale)都會形成一個column
 #  2.每個觀察個體(observation)都會形成一個row
 #  3.每一種類型的觀察個體會形成一個table,比如說:地區特徵跟個體資料應該存成兩個不同的資料表格
-library(readr)
+# install.packages("tidyverse")
+library(readr) 
 library(tidyr)
 
 pew <- read_delim("http://stat405.had.co.nz/data/pew.txt",delim="\t")
@@ -42,7 +43,7 @@ table2 %>%
 
 ################################################################################################
 
-tb <- read_csv("C:\\Users\\wuyijin\\Desktop\\data\\tb.csv")
+tb <- read_csv("https://raw.githubusercontent.com/yijinwu1/R/master/excel/tb.csv")
 tb #資料把值存在 column：m_0-4 代表男性 0 - 4 歲的個體數。兩個變數存在同一個值：m_0-4 存了兩個變數。不符合tidy data 原則。
 
 ## 1.處理把值存在 column。使用gather()
@@ -68,7 +69,7 @@ tb.new %>%
 
 ################################################################################################
 
-tb <- read_csv("C:\\Users\\wuyijin\\Desktop\\data\\tb_new.csv")
+tb <- read_csv("https://raw.githubusercontent.com/yijinwu1/R/master/excel/tb_new.csv")
 tb #age_lb、age_ub被存成兩個column，不符合tidy data 原則。
 
 #一個變數被分存在不同 columns 中 - 使用 unite 函數
