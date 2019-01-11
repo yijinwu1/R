@@ -1,23 +1,32 @@
 # data frame VS tibble
-# data frame Base R， tibble New
-library(tibble) #install.packages("tidyverse")
+
+# data frame Base R。tibble 是 R 語言中獨有的資料架構，改善了 data.frame 的一些缺點，與 data.frame 有類似的語法，但使用起來更方便。
+
+#install.packages("tidyverse")
+library(tibble) 
 
 ###############################################################################
 
 # 建立 data frame
-x <- c(1:5)
+x <- c(1:20)
 y <- 1
 z <- x^2+y
 df.data <- data.frame(x,y,z) #data.frame(x = c(1:5),y = 1,z = x^2+y)無法直接創建data frame
-df.data
+df.data # 顯示所有資料。只顯示column name
+head(df.data,10) # 顯示前10筆資料。
+df.data[,1,drop=FALSE] # 選取子集合時會回傳向量。除非設定drop=FALSE。
+str(df.data[,1]) # int [1:20] 1 2 3 4 5 6 7 8 9 10 ...
+str(df.data[,1,drop=FALSE]) #'data.frame':	20 obs. of  1 variable: $ x: int  1 2 3 4 5 6 7 8 9 10 ...
 
 # 建立 tibble
 tib.data <- tibble(
-  x = c(1:5),
+  x = c(1:20),
   y = 1,
   z = x^2+y
   )
-tib.data
+tib.data # 顯示10筆資料。顯示column name and column type
+tib.data[,1] # tibble 仍會回傳 tibble 物件
+str(tib.data[,1]) #Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	20 obs. of  1 variable:$ x: int  1 2 3 4 5 6 7 8 9 10 ...
 
 ## 轉換資料型態 ##
 Dr.Lee <- list(gender="man", age=18, hobby=c("tease", "be teased"))
