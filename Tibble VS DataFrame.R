@@ -39,7 +39,10 @@ df.Lee
 
 # 轉換資料型態為tibble
 tib.Lee <- as_tibble(Dr.Lee,stringsAsFactors = FALSE)
-class(tib.Lee)
+class(tib.Lee) 
+## [1] "tbl_df"     "tbl"        "data.frame" 
+## tbl_df 繼承了 tbl 類型，tbl 繼承了data.frame，簡單來說，tibble 其實是 data.frame 的子類型。
+## 如果不熟悉的話，你只要看 class 的第一個結果有沒有 tbl 即可
 tib.Lee 
 
 ###############################################################################
