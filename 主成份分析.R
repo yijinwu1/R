@@ -20,7 +20,7 @@
 
 library("tidyverse")
 
-ramen.data <- read_csv("C:\\Users\\wuyijin\\Desktop\\data\\ramen.csv")
+ramen.data <- read_csv("https://raw.githubusercontent.com/yijinwu1/R/master/excel/ramen.csv")
 ramen.data
 
 summary(ramen.data)
