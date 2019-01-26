@@ -19,7 +19,7 @@
 ######################################################
 
 library("tidyverse")
-#拉麵店 湯頭、麵條、料
+
 ramen.data <- read_csv("C:\\Users\\wuyijin\\Desktop\\data\\ramen.csv")
 ramen.data
 
@@ -143,11 +143,25 @@ plot_ly(
   yaxis = list(title = 'Return on Equity'),
   margin = list(r = 30, t = 50, b = 70, l = 50)
 )
+
+plot_ly(
+  x = spca.score[, 1],
+  y = spca.score[, 2],
+  text = ramen.data$store,
+  type = "scatter",
+  mode = "markers"
+) %>% layout(
+  title = "PC 1 v.s. PC 2 Score: Scatter Plot",
+  xaxis = list(title = 'Principal Component 1'),
+  yaxis = list(title = 'Principal Component 2'),
+  margin = list(r = 30, t = 50, b = 70, l = 50)
+)
 ################################################
 
 #非負主成份分析
 #install.packages("nsprcomp")
 library(nsprcomp)
+
 nspca.model <- nscumcomp(ramen.data[,2:ncol(ramen.data)],k=90,nneg = TRUE,scale. = TRUE) # nneg=T 非負
 names(nspca.model)
 summary(nspca.model)
@@ -253,3 +267,41 @@ plot_ly(
 
 #二元圖(個體、變數、主成分關係)
 biplot(nspca.model)
+
+#進行分層
+#各欄位尺度不一致，針對數值欄位做極值正規化處理( (v-Min)/(Max-Min) )
+ramen.cluster <- ramen.data[,2:4] %>%
+  mutate(
+    cluNoodles = (noodles - min(noodles)) / (max(noodles)-min(noodles)),
+    cluMaterial = (material - min(material)) / (max(material)-min(material)),
+    cluSoup = (Soup - min(Soup)) / (max(Soup)-min(Soup))
+  )
+
+ramen.cluster <- ramen.cluster[,4:6] #保留分群需要資料
+
+#觀察資料的相關性
+CorMatrix <- ramen.cluster %>% cor() %>% melt()
+#繪製關聯熱力圖
+ggplot( data = CorMatrix) +
+  geom_tile(aes(Var1, Var2,fill = value), colour = "white") + 
+  scale_fill_gradient2(low = "firebrick4", high = "steelblue") +
+  guides(fill=guide_legend(title="Correlation")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+        axis.title = element_blank())
+
+set.seed(500) #隨機種子確保每次結果都一樣
+#dist():計算距離
+Distance <- dist(ramen.cluster, method = "euclidean") # euclidean:歐式距離
+hclust(Distance,method="complete") %>% plot() #圖示約莫分2~3群左右
+
+#Kmeans先分3群
+set.seed(500) # remove the random effect
+K <- kmeans(ramen.cluster,3)
+ClusterResult <- cbind(ramen.cluster, K$cluster,row.names=ramen.data$store) %>% as.data.frame() # row.names:不依R預設值
+colnames(ClusterResult)[ncol(ClusterResult)] <- 'Cluster' # K$cluster column name is Cluster
+table(ClusterResult$Cluster)
+
+# install.packages("ggfortify")
+library(ggfortify)
+set.seed(500)
+autoplot(kmeans(ramen.cluster, 3), data  = ClusterResult, label=TRUE, label.size = 10)
