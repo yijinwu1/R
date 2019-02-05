@@ -1,0 +1,157 @@
+---
+title: "多元線性迴歸"
+author: "wuyijin"
+date: "2019年2月1日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<h1>多元線性迴歸</h1>
+*   找出影響因素到進一步解釋目標
+<table BORDER="2">
+  <tr>
+    <td></td>
+    <td ALIGN=center>關聯性</td>
+    <td ALIGN=center>解釋力</td>
+  </tr>
+  <tr>
+    <td ALIGN=center>目的</td>
+    <td ALIGN=left>&nbsp;建立目標和變數間的關聯性&nbsp;</td>
+    <td ALIGN=left>&nbsp;解釋目標大部分的變異&nbsp;</td>
+  </tr>
+  <tr>
+    <td ALIGN=center>方法</td>
+    <td ALIGN=left>&nbsp;1.影響力的係數<br>&nbsp;2.統計上的顯著性 </td>
+    <td ALIGN=left>&nbsp;1.解釋能力<br>&nbsp;2.基本的預測能力 </td>
+  </tr>
+  <tr>
+    <td ALIGN=center>&nbsp;解決方案&nbsp;</td>
+    <td colspan="2" ALIGN=left>&nbsp;找出可能具有影響力的解釋變數<br>&nbsp;建立目標(被解釋變數)和解釋變數間的關聯性<br>&nbsp;確定此關聯性，能充分解釋目標的變異</td>
+  </tr>	
+</table>
+<hr/>
+*   釐清目標和各個變數間的關係
+    > ![image](https://yijinwu1.github.io/R/images/linerRegression1.png)
+     1建立目標(Y，被解釋變數)和各變數(X，解釋變數)間的線性關係<br/>
+     2估計各各解釋變數的係數β，使此線性組合能去逼近真實的目標<br/>
+     3不論目標怎麼變化，都能用此組合掌握，並進一步解釋
+<hr/>
+*   用最簡單的數學來詮釋簡單的廻歸模型 
+    * ![ubuntu1](https://yijinwu1.github.io/R/images/linerRegression2.png)
+    * y = ax + b<br/>
+    * 圖中的藍線，可以表示成這個形式<br/>
+    * 藍線能夠大致解釋紅色資料點的變化<br/>
+    * 推廣到多維，就是多元迴歸分析<br/>
+<table BORDER="2">
+  <tr>
+    <td>&nbsp;&nbsp;演算法流程</td>	
+  </tr>
+  <tr>
+    <td>&nbsp;Step 1: 選取和目標可能有關的變數&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不僅能夠解釋各個變數的係數，<br>
+    &nbsp;Step 2: 透過最適化的流程，估計出各變數的係數&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;➞&nbsp;&nbsp;&nbsp;&nbsp;最小化誤差也隱含<br>
+    &nbsp;Step 3: 估計出一組係數，使其與真實的Y誤差最小&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;此模型具有一定的預測能力。</td>
+  </tr>	
+</table>
+<br>
+<table BORDER="2" CELLPADDING="2">
+  <tr>
+    <td></td>
+    <td ALIGN=center>&nbsp;解釋力</td>
+		<td ALIGN=center>&nbsp;預測力</td>
+  </tr>
+  <tr>
+    <td ALIGN=center>&nbsp;效果&nbsp;</td>
+		<td ALIGN=left>&nbsp;1.透過X的係數，了解它們如何影響Y<br>&nbsp;2.新增/去除某個變數後，各個變數的影響力會如何變化</td>
+		<td ALIGN=left>&nbsp;1.解釋了Y大部分的變異後，此模型及抓到Y的趨勢<br>&nbsp;2.即使存在誤差，我們有信心說這是一個好的方法預測目標&nbsp;</td>
+  </tr>
+  <tr>
+    <td ALIGN=center>&nbsp;說明&nbsp;</td>
+		<td ALIGN=left>&nbsp;β的係數是1000，表示X增加1時，Y會增加1000</td>
+		<td ALIGN=left>&nbsp;無論各變數怎麼變化，都可以放入迴歸模型，得到預測的Y值&nbsp;</td>
+    </tr>	
+</table> 
+<hr/> 
+*   透過假說思考驗證
+    * 1模型是否有足夠的解釋力
+    * 2變數對於目標的解釋力與意義
+    * 3模型本身是否有意義
+    
+    * 假說思考
+        *  提出假說:針對商業命題，對不同的變數、模型提出初步的假設
+        *  驗證假說:透過數學及統計上的意義，驗證假說是否成立
+        *  回答問題:以驗證的結果，回答商業分析的命題
+<hr/> 
+*   迴歸分析的計算核心 - 最小平方法
+    * ![ubuntu1](https://yijinwu1.github.io/R/images/linerRegression3.png)
+    * 綠色虛線表示原始資料點(紅點)到預測資料點(藍線)的距離(殘差)
+    * 利用最適化的方法估計出一組係數，使得殘差平方和最小
+<table BORDER="2" CELLPADDING="20">
+  <tr>
+    <td>&nbsp;最小平方法流程</td>	
+	</tr>
+  <tr>
+    <td>&nbsp;Step 1: 選定一組係數，並計算誤差的平方總和<br>
+    &nbsp;Step 2: 往誤差更小(維分、梯度)的方向修正，並更新係數<br>
+    &nbsp;Step 3: 重複 Step 1 & Step 2，直到誤差的平方總和最小為止&nbsp;</td>	 
+  </tr>	
+</table>   
+<hr/>
+<table BORDER="2" >
+  <tr>
+    <td colspan="5">&nbsp;透過假設檢定探討迴歸模型的統計意義</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>&nbsp;提出假說</td>
+    <td>&nbsp;驗證假說</td>
+    <td></td>
+  <td>&nbsp;進行修正</td>
+  </tr>
+  <tr>
+    <td>&nbsp;R平方&nbsp;</td>
+    <td>&nbsp;目前的模型足以解釋Y大部分的變異<br>&nbsp;(模型對目標的解釋能力)</td>
+    <td>&nbsp;計算R平方值</td>
+		<td>&nbsp;→→→→→→→→&nbsp;<br>&nbsp;解釋力過低</td>
+		<td>&nbsp;納入新的變數<br>&nbsp;進行變數轉換<br>&nbsp;嘗試不同變數組合&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;F檢定&nbsp;</td>
+    <td>&nbsp;目前的模型至少有一些解釋Y變異的能力<br>&nbsp;(針對整個模型進行檢定)</td>
+		<td>&nbsp;H0:模型不具解釋能力<br>&nbsp;H1:模型至少有解釋能力</td>
+		<td>&nbsp;→→→→→→→→&nbsp;<br>&nbsp;無法拒絕<br>&nbsp;虛無假設</td>
+		<td>&nbsp;納入新的變數<br>&nbsp;進行變數轉換<br>&nbsp;嘗試不同變數組合</td>
+  </tr>
+  <tr>
+    <td>&nbsp;t檢定&nbsp;</td>
+    <td>&nbsp;使用的X變數對於Y至少有一些解釋能力<br>&nbsp;(針對單一變數進行檢定)</td>
+		<td>&nbsp;H0:該變數不具解釋能力<br>&nbsp;H1:該變數至少有解釋能力</td>
+		<td>&nbsp;→→→→→→→→&nbsp;<br>&nbsp;無法拒絕<br>&nbsp;虛無假設</td>
+		<td>&nbsp;剔除該變數<br>&nbsp;嘗試不同變數組合</td>
+  </tr>	
+</table> 
+<hr/> 
+*   <h1>凡有預測，必有誤差</h1>
+    * ![ubuntu1](https://yijinwu1.github.io/R/images/linerRegression4.png)
+    * 殘差的三個假設
+        * 殘差分布是很均勻的散落在零的上下
+        * 在不同的X值或不同的Y值，殘差是沒有明顯趨勢 
+        * 剩餘隨機分布的誤差，模型無法再優化，即可輔助商業決策
+<hr/>
+*   總結迴歸模型與假說思考的流程
+<table BORDER="2">
+  <tr>
+    <td>&nbsp;提出假說</td>	 
+    <td>&nbsp;驗證假說</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;回答問題</td>
+  </tr>
+  <tr>
+    <td>&nbsp;從樣本的觀察中，<br>&nbsp;對解釋變數X和目標Y之間的關聯提出假說&nbsp;</td>	 
+    <td>&nbsp;1.利用最小平方法建立迴歸模型<br>&nbsp;2.檢定變數及模型的解釋能力和統計顯著性&nbsp;</td>
+    <td>&nbsp;→→→&nbsp;<br>&nbsp;&nbsp;&nbsp;通過</td>
+    <td>&nbsp;解釋力:<br>&nbsp;&nbsp;從係數說明各X對於目標Y的影響&nbsp;&nbsp;<br>&nbsp;預測力:<br>&nbsp;&nbsp;利用模型更準確地預測目標Y值</td>
+  </tr>	
+</table>

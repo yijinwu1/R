@@ -1,0 +1,28 @@
+---
+title: "R學習筆記"
+author: "wuyijin"
+date: "2019年2月1日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# echo:是否要將程式顯示在文件中(預設為 TRUE)
+```
+
+# 環境建置
+- 待續(安裝R)
+- 待續(安裝RStudio)
+
+# 語法
+- 待續(基本資料型態)
+- 待續(套件與函式)
+- 待續(流程控制)
+
+# 資料處理
+- 待續
+
+# 模型建構
+- <a href="https://yijinwu1.github.io/R/MultipleRegression.html" target="_blank">多元線性迴歸</a>
+- <a href="https://yijinwu1.github.io/Demo/reman.html" target="_blank">邏輯迴歸</a>
+- <a href="https://yijinwu1.github.io/Demo/reman.html" target="_blank">決策樹</a>
