@@ -1,0 +1,118 @@
+---
+title: "邏輯迴歸"
+author: "wuyijin"
+date: "2019年2月1日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<h1>邏輯迴歸</h1>
+*   乙狀函數
+    * 為一介於(0,1)之間，嚴格遞增的可微分函數
+    * ![image](https://yijinwu1.github.io/R/images/LR1.png)
+    * 使用乙狀函數描述解釋變數X與條件機率的關係
+    * ![image](https://yijinwu1.github.io/R/images/LR2.png)    
+    * 對數勝率(Log Odds/Logit)與機率呈現乙狀關係
+    * ![image](https://yijinwu1.github.io/R/images/LR3.png)
+        * 解釋變數與條件機率呈現乙狀關係(邏輯迴歸的基本假設)
+        * 對數勝率與條件機率呈現乙狀關係(對數勝率的數學性質)     
+<hr/>
+*   最大概似法
+    * 利用最大概似法估計邏輯迴歸的參數
+    * ![image](https://yijinwu1.github.io/R/images/LR4.png)
+    
+*   假設檢定
+    * 確認參數是否顯著異於0
+    * ![image](https://yijinwu1.github.io/R/images/LR5.png)
+
+*   解釋變數增加1單位將影響對數勝率、勝率、條件機率
+<table BORDER="2">
+  <tr>
+    <td ALIGN=center colspan="4">logit = β0 + β1X1</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td ALIGN=left>&nbsp;對數勝率(Logit)&nbsp;</td>
+    <td ALIGN=left>&nbsp;勝率(Odds)&nbsp;</td>
+    <td ALIGN=left>&nbsp;P(Y=1|X1)&nbsp;</td>
+  </tr>
+  <tr>
+    <td ALIGN=left>&nbsp;數值&nbsp;</td>
+    <td ALIGN=left>&nbsp;正比β1</td>
+    <td ALIGN=left>&nbsp;正比β1</td>
+    <td ALIGN=left>&nbsp;正比β1</td>
+  </tr>
+</table>
+<hr/>
+
+
+*   透過量化指標或是統計檢定進行模型比較
+<table BORDER="2">
+  <tr>
+    <td></td>
+    <td>&nbsp;Pseudo R-Square&nbsp;</td>
+    <td>&nbsp;AIC / BIC&nbsp;</td>
+    <td>&nbsp;極度比檢定&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;理論&nbsp;</td>
+    <td>&nbsp;比較目前模型與模型1<br>&nbsp;兩種模型捕捉資料資訊的能力&nbsp;</td>
+    <td>&nbsp;計算目前模型與真實模型時的<br>&nbsp;資訊落差，同時對遍數量進懲罰&nbsp;</td>
+    <td>&nbsp;比較兩個不同模型(不同解釋變數X)<br>&nbsp;捕捉資料資訊的能力&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;說明&nbsp;</td>
+    <td>&nbsp;越靠近1，<br>&nbsp;代表模型的解釋能力越好&nbsp;</td>
+    <td>&nbsp;AIC/BIC越小，<br>&nbsp;資訊落差越小，解釋能力越好&nbsp;</td>
+    <td>&nbsp;若結果顯著，<br>&nbsp;代表傾向接受第一個模型&nbsp;</td>
+  </tr>	  
+</table>
+<hr/>
+*   估計完個體機率後，根據設定的臨界機率進行分類
+    * ![image](https://yijinwu1.github.io/R/images/LR6.png)
+*   分類問題的模糊矩陣(Confusion Matrix)
+<table border="2">
+  <tr>
+    <td></td>
+    <td></td>
+    <td colspan="2" align="center">真實情況</td>	 
+  </tr>	
+  <tr>
+    <td></td>
+    <td></td>	
+    <td>&nbsp;Y=1&nbsp;</td>	 
+    <td>&nbsp;Y=0&nbsp;</td>
+  </tr>	
+  <tr>
+    <td rowspan="2" align="center">模型分類</td>
+    <td>&nbsp;Y=1</td>	 
+    <td>&nbsp;真陽性TP<br>&nbsp;(True Positive)&nbsp;</td>
+    <td>&nbsp;偽陽性FP<br>&nbsp;(False Positive)&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;Y=0</td>	 
+    <td>&nbsp;偽陰性FN<br>&nbsp;(False Negative)&nbsp;</td>
+    <td>&nbsp;真陰性TN<br>&nbsp;(True Negative)&nbsp;</td>
+  </tr>	
+</table>  
+<hr/> 
+    * 準確率(Accuracy)
+        * 指標定義:所有個體中，有多少比率的個體被分類正確?
+        * 計算公式:Accuracy = (TP + TN) / (TP + FP + TN + FN)
+    * 精確度(Precision)
+        * 指標定義:被模型分類為陽性的個體中，有多少比率確實為陽性?
+        * 計算公式:Precision = TP / (TP + FP)
+    * 召回度/敏感度(Recall/Sensitivity)
+        * 指標定義:真正為陽性的個體中，有多少模型正確分類為陽性?
+        * 計算公式:Recall = TP / (TP + FN) 
+    * 明確度(Specificity)
+        * 指標定義:被模型分類為陰性的個體中，有多少比率確實為陰性?
+        * 計算公式:Specificity = TN / (TN + FP) 
+<hr/>
+*   解釋ROC曲線(敏感度與明確度間的抵換關係)
+    * ![image](https://yijinwu1.github.io/R/images/LR7.png)
+    * 由左而右代表臨界機率從1至0的到的(1-明確度,敏感度)
+    * 曲線下面積(AUC)越靠近1，代表模型的分類效果越好，估計出來的機率越能夠分開資料
