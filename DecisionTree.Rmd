@@ -1,0 +1,102 @@
+---
+title: "決策樹"
+author: "wuyijin"
+date: "2019年2月1日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<h1>決策樹</h1>
+*   不只要判斷清楚，也需要清楚的決策過程
+<table BORDER="2">
+  <tr>
+    <td></td>
+    <td ALIGN=center>&nbsp;判斷清楚&nbsp;</td>
+    <td ALIGN=center>&nbsp;決策過程&nbsp;</td>
+  </tr>
+  <tr>
+    <td ALIGN=center>&nbsp;目的&nbsp;</td>
+    <td ALIGN=left>&nbsp;衡量新納入的變數能不能幫助我們判斷得更清楚，包含分類問題、預測問題等&nbsp;</td>
+    <td ALIGN=left>&nbsp;表達不同針對於判斷目標的貢獻度與關係&nbsp;</td>
+  </tr>
+  <tr>
+    <td ALIGN=center>&nbsp;方法&nbsp;</td>
+    <td ALIGN=left>&nbsp;再引入不同特徵後，計算不確定性，用來衡量是否能判斷得更清楚&nbsp;</td>
+    <td ALIGN=left>&nbsp;進一步將不確定性的過程視覺化&nbsp;</td>
+  </tr>
+  <tr>
+    <td ALIGN=center>&nbsp;解決方案&nbsp;</td>
+    <td ALIGN=left colspan="2">&nbsp;考量原始資料的各個特徵，並計算目前的不確定性<br>                             &nbsp;計算加入不同的變數後，是否能降低判斷的不確定性<br>
+                            &nbsp;找出判斷正確可能性最大的幾種決策路徑</td>
+  </tr>  
+</table>
+<hr/>
+*   吉尼不純度(Gini Imputity)
+    * ![image](https://yijinwu1.github.io/R/images/tree1.png)
+    * 衡量納入新特徵後，能否降低不確定程度
+    * 步驟
+        * Step1：選取一個或多個特徵，並計算吉尼不純度
+        * Step2：和選取前一次的結果做比較
+        * Step3：重複前兩個步驟，直到吉尼不純度不能下降為止
+        
+<hr/>
+*   熵
+    * ![image](https://yijinwu1.github.io/R/images/tree2.png)
+    * 衡量現有資訊的複雜(混亂)程度
+    * 步驟
+        * Step1：選取一個或多個特徵，並計算熵
+        * Step2：和選取前一次的結果做比較
+        * Step3：重複前兩個步驟，直到熵下降為止
+<hr/>
+*   吉尼不純度與熵比較        
+<table BORDER="2">
+  <tr>
+    <td></td>
+    <td ALIGN=center>&nbsp;吉尼不純度&nbsp;</td>
+    <td ALIGN=center>&nbsp;熵&nbsp;</td>
+  </tr>
+  <tr>
+    <td ALIGN=center>&nbsp;原理&nbsp;</td>
+    <td ALIGN=left>&nbsp;以判斷結果是否區分清楚，降低不純度，來衡量特徵對於判斷目標的幫助&nbsp;</td>
+    <td ALIGN=left>&nbsp;以資訊的複雜度出發，探討新的特徵能否降低整體複雜度，進而更容易判斷&nbsp;</td>
+ </tr>
+  <tr>
+    <td ALIGN=center>&nbsp;強調&nbsp;</td>
+    <td ALIGN=left>&nbsp;直觀理解判斷結果的&nbsp;</td>
+    <td ALIGN=left>&nbsp;每次結果的資訊複雜度&nbsp;</td>
+  </tr>	
+  <tr>
+    <td ALIGN=center>&nbsp;計算方式&nbsp;</td>
+    <td ALIGN=left>&nbsp;<img src="https://yijinwu1.github.io/R/images/tree3.png">&nbsp;</td>
+    <td ALIGN=left>&nbsp;<img src="https://yijinwu1.github.io/R/images/tree4.png">&nbsp;</td>
+  </tr>
+  <tr>
+    <td ALIGN=left consplan="3">&nbsp;資訊增益(Information Gain)<br>
+    &nbsp;計算這兩個指標的過程中，下降多少不確定性，增加了多少有用的資訊</td>
+  </tr>
+</table>
+<hr/>
+*   CART
+    * ![image](https://yijinwu1.github.io/R/images/tree5.png)
+    * 由上而下建構的二分岔樹，讓不確定性或誤差平方最小
+    * 流程
+        * Step1：比較不同特徵的分類效果，以指標最小的特徵做為起點進行分岔
+        * Step2：針對分岔後的各節點，繼續納入新的特徵進行分岔
+        * Step3：若新的特徵無法使判斷指標繼續下降，則停止於該節點分岔
+        * Step4：衡量整個模型的不確定性或誤差平方，直到無法再降低為止
+        * Step5：保留現有結構，做為決策樹模型
+        * ![image](https://yijinwu1.github.io/R/images/tree6.png)
+        * ![image](https://yijinwu1.github.io/R/images/tree7.png)
+<hr/> 
+*   過度擬合與剪枝
+    * 過度擬合(Over-fitting)
+        * 決策樹模型為了配合目前觀察到的資料型態，而過度生長(過度複雜)；雖然能夠精準分類、預測現有資料，卻沒辦法提供正確的洞察，或應用在其他資料集上
+    * 剪枝(Prune)      
+        * 修剪過度生長的分支
+        * 方法
+            * 交叉驗證：用訓練和驗證資料重複檢測
+            * 統計檢測：檢驗是否在整體資料具有統計上的顯著差異
+            * 衡量指標：如REP、PEP、CCP等指標，計算是否應該剪枝            
