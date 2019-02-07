@@ -60,8 +60,8 @@ knitr::opts_chunk$set(echo = TRUE)
   </tr>
   <tr>
     <td ALIGN=center>&nbsp;原理&nbsp;</td>
-    <td ALIGN=left>&nbsp;以判斷結果是否區分清楚，降低不純度，來衡量特徵對於判斷目標的幫助&nbsp;</td>
-    <td ALIGN=left>&nbsp;以資訊的複雜度出發，探討新的特徵能否降低整體複雜度，進而更容易判斷&nbsp;</td>
+    <td ALIGN=left>&nbsp;以判斷結果是否區分清楚，降低不純度，<br>&nbsp;來衡量特徵對於判斷目標的幫助&nbsp;</td>
+    <td ALIGN=left>&nbsp;以資訊的複雜度出發，<br>&nbsp;探討新的特徵能否降低整體複雜度，進而更容易判斷&nbsp;</td>
  </tr>
   <tr>
     <td ALIGN=center>&nbsp;強調&nbsp;</td>
@@ -74,8 +74,8 @@ knitr::opts_chunk$set(echo = TRUE)
     <td ALIGN=left>&nbsp;<img src="https://yijinwu1.github.io/R/images/tree4.png">&nbsp;</td>
   </tr>
   <tr>
-    <td ALIGN=left consplan="3">&nbsp;資訊增益(Information Gain)<br>
-    &nbsp;計算這兩個指標的過程中，下降多少不確定性，增加了多少有用的資訊</td>
+    <td ALIGN=left colspan="3">&nbsp;&nbsp;&nbsp;&nbsp;資訊增益(Information Gain)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;計算這兩個指標的過程中，下降多少不確定性，增加了多少有用的資訊</td>
   </tr>
 </table>
 <hr/>
