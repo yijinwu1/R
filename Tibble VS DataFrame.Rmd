@@ -1,0 +1,201 @@
+---
+title: "Tibble VS DataFrame"
+author: "wuyijin"
+date: "2019年2月7日"
+output: html_document
+---
+
+*   data frame VS tibble
+    * data frame is Base R。
+    * tibble 是 R 語言中獨有的資料架構，改善data.frame的缺點，與data.frame有類似的語法，但使用更方便。
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE}
+#install.packages("tidyverse")
+library(tibble) 
+```
+
+*   創建data frame 與 tibble
+```{r warning=FALSE}
+# 建立 data frame
+x <- c(1:30)
+y <- 1
+z <- x^2+y
+df.data <- data.frame(x,y,z) 
+
+# 無法一行創建data frame
+# data.frame(x = c(1:30),y = 1,z = x^2+y) 
+
+# 建立 tibble
+tib.data <- tibble(x = c(1:30),y = 1,z = x^2+y) 
+```
+
+*   data frame 與 tibble資料顯示格式
+```{r warning=FALSE}
+# Data frame只顯示column name與所有Row Data。
+df.data 
+#  Data frame只顯示前N筆資料，使用head(data, N)。
+head(df.data,10) 
+
+# Tibble顯示column name與type、Total Row X column、前N筆資料。
+tib.data 
+
+# Data frame 選取子集合時會回傳向量，除非設定drop=FALSE。
+df.data[,1]
+str(df.data[,1]) 
+str(df.data[,1,drop=FALSE])
+# tibble 仍會回傳 tibble 物件
+tib.data[,1] 
+str(tib.data[,1])
+```
+*   轉換型態為data frame 或 tibble
+```{r warning=FALSE}
+Dr.Lee <- list(gender="man", age=18, hobby=c("tease", "be teased"))
+class(Dr.Lee)
+
+# 轉換資料型態為data frame。stringsAsFactors = FALSE，文字不會轉成factor type。
+df.Lee <- as.data.frame(Dr.Lee,stringsAsFactors = FALSE)
+str(df.Lee)
+
+# 轉換資料型態為tibble。stringsAsFactors = FALSE，文字不會轉成factor type。
+tib.Lee <- as_tibble(Dr.Lee,stringsAsFactors = FALSE)
+str(tib.Lee)
+```
+*   Column - 查 column 個數
+```{r warning=FALSE}
+ncol(df.Lee)
+ncol(tib.Lee)
+```
+*   Column - 查 All column name
+```{r warning=FALSE}
+colnames(df.Lee)
+colnames(tib.Lee)
+```
+*   Column - 指定某個column name
+```{r warning=FALSE}
+colnames(df.Lee)[3]
+colnames(tib.Lee)[3]
+```
+*   Column - 改 column name
+```{r warning=FALSE}
+names(df.Lee) <- c("DFgender","DFCage","DFChobby")
+names(tib.Lee) <- c("TibCgender","TibCage","TibChobby")
+```
+*   Column - 新增 column
+    *   1.cbind，效能差
+```{r warning=FALSE}
+name1 <- c("John","Jack")
+addc.df1 <- cbind(DFgender=df.Lee[,1],name1,df.Lee[,2:ncol(df.Lee)]) #指定 column 位置 ## 注意:只有1個 column 要給 column name
+addc.df1
+
+addc.tib1 <- add_column(tib.Lee,name1=c("John","Jack"),.before = 2) #指定 column 位置
+addc.tib1
+```
+*   Column - 新增 column
+    *   2.直接加 column name
+```{r warning=FALSE}
+addc.df1$name2 <- c("John2", "Jack2")
+addc.df1[["name2"]] <- c("John2", "Jack2")
+addc.df1[,"name2"]  <- c("John2", "Jack2")
+addc.df1
+
+addc.tib1$name2 <- c("John2", "Jack2")
+addc.tib1[["name2"]] <- c("John2", "Jack2")
+addc.tib1[,"name2"]  <- c("John2", "Jack2")
+addc.tib1
+```
+*   Column - 移除 column
+```{r warning=FALSE}
+names(addc.df1) 
+addc.df1$name2 <- NULL
+names(addc.df1) 
+addc.df1 <- addc.df1[,-2] 
+names(addc.df1)
+
+names(addc.tib1) 
+addc.tib1$name2 <- NULL
+names(addc.tib1) 
+addc.tib1 <- addc.tib1[,-2] 
+names(addc.tib1) 
+```
+
+*   Column - 改變 column 資料型態
+```{r warning=FALSE}
+str(df.Lee[,1]) 
+#df.Lee[,1] <- as.factor(df.Lee[,1]) ##注意:不可使用df.Lee[1] <- as.factor(df.Lee[1]) $ gender: Factor w/ 1 level "man": NA NA
+df.Lee$DFgender <- as.factor(df.Lee$DFgender)
+str(df.Lee[,1])
+
+str(tib.Lee[,1])
+#注意:不可使用 tib.Lee[,1] <- as.factor(tib.Lee[,1])、tib.Lee[1] <- as.factor(tib.Lee[1])
+tib.Lee$TibCgender <- as.factor(tib.Lee$TibCgender) 
+str(tib.Lee[,1]) # $ gender: Factor w/ 1 level "man": 1 1
+```
+
+*   row - 查 row 個數
+```{r warning=FALSE}
+nrow(df.Lee)
+nrow(tib.Lee)
+```
+
+*   row - 新增 row 
+    *   1.rbind，效能差
+    *   注意: factor的元素值只能是levels中的其中一種或是缺失值（NA），如果將factor的元素指定為其他的字串，該元素就會被設定為缺失值。
+```{r warning=FALSE}
+nlevels(df.Lee$DFgender) # factor 數量 ## [1] 1
+levels(df.Lee$DFgender) # factor 的 level ## [1] "man"
+levels(df.Lee$DFgender) <- c(levels(df.Lee$DFgender), "woman") #新增 woman
+str(df.Lee$DFgender)
+addr.df1 <- rbind(df.Lee[1,],c("woman",19,"tease"),df.Lee[2:nrow(df.Lee),]) #指定 row 位置
+str(addr.df1$DFgender)
+addr.df1
+
+nlevels(tib.Lee$TibCgender) # factor 數量 ## [1] 1
+levels(tib.Lee$TibCgender) # factor 的 level ## [1] "man"
+levels(tib.Lee$TibCgender) <- c(levels(tib.Lee$TibCgender), "woman")
+str(tib.Lee$TibCgender)
+addr.tib1 <- add_row(tib.Lee,TibCgender="woman",TibCage=19,TibChobby="tease",.before=2) #指定 row 位置
+str(addr.tib1$TibCgender)
+addr.tib1
+```
+*   row - 移除 row
+```{r warning=FALSE}
+addr.df1 # 1 , 2 , 21
+addr.df1 <- addr.df1[-3, ]
+addr.df1 # 1 , 2
+addr.df1 <- addr.df1[-c(2), ]
+addr.df1 # 1 
+
+addr.tib1 # 1 , 2 , 3
+addr.tib1 <- addr.tib1[-2, ]
+addr.tib1 # 1 , 2
+addr.tib1 <- addr.tib1[c(-2), ]
+addr.tib1 # 1
+```
+
+*   total -  row，column 總比數
+```{r warning=FALSE}
+dim(df.Lee) # [1] 2 3
+dim(tib.Lee) # [1] 2 3
+```
+
+*   total -  資料結構
+```{r warning=FALSE}
+str(df.Lee)
+str(tib.Lee)
+```
+
+*   total -  查 second row，third column 資料
+```{r warning=FALSE}
+df.Lee[2,3]
+tib.Lee[2,3]
+```
+
+*   total -  查 be teased 資料
+```{r warning=FALSE}
+subset(df.Lee, DFChobby == "be teased")
+subset(tib.Lee, TibChobby == "be teased")
+```

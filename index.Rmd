@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # 語法
 - 待續(基本資料型態)
+- <a href="https://yijinwu1.github.io/R/Tibble_VS_DataFrame.html" target="_blank">Tibble VS Data Frame</a>
 - 待續(套件與函式)
 - 待續(流程控制)
 
