@@ -1,0 +1,88 @@
+---
+title: "DataStructures"
+author: "wuyijin"
+date: "2019年2月8日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<h1>R三大資料結構</h1>
+*   一維
+    * 向量(Vectors)
+    ```{r warning=FALSE}
+    a <- c(1,2,5.3,6.-2,4)
+    a
+
+    #連續向量
+    a <- 2:9 
+    a
+
+    #中括號[]指定元素的索引(index)
+    a[c(2,4)] 
+
+    #中括號[]更新特定位置的數值
+    a[3] <- 2*a[3]
+    a[3]
+
+    #中括號[]篩選特定數值
+    b <- c("one","two","three")
+    b == "one"
+    b[b == "one"]
+    ```
+    * 因子(Facots)
+    ```{r warning=FALSE}
+    apple_colors <- c('green','green','yellow','red','red','green')
+    factor_apple <- factor(apple_colors)
+    factor_apple   
+    
+    # 變數因子個數
+    nlevels(factor_apple)
+    ```   
+*   二維
+    * 矩陣(Matrices)
+    ```{r warning=FALSE}
+    # 先row 後col
+    M <- matrix(c('a','a','b','c','b','a'),nrow=2,ncol=3)
+    M
+    
+    M <- matrix(c('a','a','b','c','b','a'),nrow=2,ncol=3,byrow=TRUE)
+    M
+    
+    A <- matrix(c(1,2,3,4),nrow=2,ncol=2)
+    B <- matrix(c(1,1,2,2),nrow=2,ncol=2)
+    A * B
+    # R矩陣相乘 %*%
+    A %*% B
+    #轉制
+    t(A)
+    #反矩陣
+    solve(A) 
+    ```     
+    * 資料框架(Data Frame)
+    ```{r warning=FALSE}
+    name <- c("David","Hsi","Jessie")
+    age <- c("24","25","36")
+    gender <- c("Male","Male","Female")
+    data1 <- data.frame(name,age,gender)
+    data1
+    
+    data2 <- data.frame(name=c("David","Hsi","Jessie"), age=c("24","25","36"), gender=c("Male","Male","Female"))
+    data2
+    ```    
+*   多維
+    * 列表(List)
+    ```{r warning=FALSE}
+    list1 <- list(c(2,5,3),21.3,sin)
+    list1
+    
+    list2 <- list(vector=c(2,5,3),numeric=21.3,func=sin)
+    list2
+    ```    
+    * 陣列(Array)
+    ```{r warning=FALSE}    
+    a <- array(c('green','yellow'),dim=c(3,3,2))
+    a    
+    ```
