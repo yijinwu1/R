@@ -32,7 +32,7 @@ knitr::opts_chunk$set(echo = TRUE)
     b == "one"
     b[b == "one"]
     ```
-    * 因子(Facots)
+    * 因子(Factors)
     ```{r warning=FALSE}
     apple_colors <- c('green','green','yellow','red','red','green')
     factor_apple <- factor(apple_colors)
