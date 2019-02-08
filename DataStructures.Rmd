@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 *   一維
     * 向量(Vectors)
     ```{r warning=FALSE}
-    a <- c(1,2,5.3,6.-2,4)
+    a <- c(1,2,5.3,6,-2,4)
     a
 
     #連續向量
