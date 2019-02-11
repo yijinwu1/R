@@ -1,0 +1,94 @@
+---
+title: "ControlStructure"
+author: "wuyijin"
+date: "2019年2月11日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*   if 條件式
+    ```{r warning=FALSE}
+    score <- 67
+    if(score >= 90) {
+      print(paste("A:",as.character(score)))
+    } else if (score >= 80) {
+      print(paste("B:",as.character(score)))	
+    } else if (score >= 70) {
+      print(paste("C:",as.character(score)))	
+    } else if (score >= 60) {
+      print(paste("D:",as.character(score)))	
+    } else {
+      print(paste("E:",as.character(score)))	
+    }
+    
+    ifelse(1==0,"Yes","No") 
+
+    toTest <- c(1,1,0,1,0,1,NA)
+    ifelse(toTest==1,"yes","no") #NA is NA
+    ```
+    
+*   迴圈
+    *   for 迴圈
+    ```{r warning=FALSE}
+    for(i in 1:5) {
+      print(i)
+    }
+
+    #for next
+    for(i in 1:5){
+      if(i==3) {
+        next
+      }
+      print(i) 
+    }
+
+    #for break
+    for(i in 1:5){
+      if(i==3) {
+        break
+      }
+      print(i) #answer is 1,2
+    }
+
+    #rep
+    fruit <- c("apple","banana","pomegranate")
+    fruitLength <- rep(NA,length(fruit))
+    fruitLength
+
+    #nchar
+    for(a in fruit) {
+      fruitLength[a] <- nchar(a)
+    }
+    fruitLength
+
+    fruitLength2 <- nchar(fruit)
+    fruitLength2
+    ```
+    
+    *   while 迴圈
+    ```{r warning=FALSE}
+    x <- 1
+    while(x<=5) {
+      print(x)
+      x <- x+1 #important
+    }
+    ```
+    *   switch
+    ```{r warning=FALSE}    
+    switch("second",first=1+1,second=1+2,third=1+3)
+    
+    use.switch <- function(x) {
+    switch(x,
+         "a"="first",
+         "b"="second",
+         "z"="last",
+         "D"="third",
+         "1"=1,
+         "other")
+    }
+
+    use.switch("d")
+    ```
