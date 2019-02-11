@@ -18,6 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 - 待續(基本資料型態)
 - <a href="https://yijinwu1.github.io/R/DataStructures.html" target="_blank">R三大資料結構</a>
 - <a href="https://yijinwu1.github.io/R/Tibble_VS_DataFrame.html" target="_blank">Tibble VS Data Frame</a>
+- <a href="https://yijinwu1.github.io/R/Operator.html" target="_blank">R運算子</a>
 - 待續(套件與函式)
 - 待續(流程控制)
 

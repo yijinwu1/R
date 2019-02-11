@@ -1,0 +1,64 @@
+---
+title: "Operator"
+author: "wuyijin"
+date: "2019年2月11日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<h1>運算子</h1>
+*   條件運算子
+    *   布林運算子: <、>、<=、>=、==、!=
+    ```{r warning=FALSE}
+    3 <= 5
+    
+    3 >= 5
+    
+    3 == 5
+    
+    3 != 5
+    ```
+    
+    *   %in%
+    ```{r warning=FALSE}
+    x <- 5
+    x  %in% c(1:6)
+    ```
+    
+    ```{r warning=FALSE}
+    set.seed(0)
+    x <- runif(5,-1,1)
+    x
+    ```
+    
+    *   AND(交集)運算子:&、&&
+    ```{r warning=FALSE}
+    0 <= x & x <= 0.5
+    
+    0 <= x && x <= 0.5 #所有皆成立
+    
+    x[0 <= x & x <= 0.5] <- 999 #符合條件，值改999
+    x
+    ```
+    
+    *   OR運算元(聯集):|、||
+    ```{r warning=FALSE}
+    -0.5 >= x | x >= 0.5
+    
+    -0.5 >= x || x >= 0.5 
+    
+    ```
+*   數學運算子
+    *   +、-、X、/、^、%%
+    ```{r warning=FALSE}
+    3 + 5
+    3 - 5
+    3 * 5
+    3 / 5
+    3 ^ 5 #次方
+    3 %% 3 #回傳餘數
+    
+    ```
