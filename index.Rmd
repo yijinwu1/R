@@ -23,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE)
 - <a href="https://yijinwu1.github.io/R/ControlSturcture.html" target="_blank">流程控制</a>
 
 # 資料處理
-- 待續
+- <a href="https://yijinwu1.github.io/R/transferTidyData.html" target="_blank">非Tiey Data轉換成Tidy Data</a>
 
 # 模型建構
 - <a href="https://yijinwu1.github.io/R/MultipleRegression.html" target="_blank">多元線性迴歸</a>

@@ -1,0 +1,102 @@
+---
+title: "非Tiey Data轉換成Tidy Data"
+author: "wuyijin"
+date: "2019年2月13日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*   Tidy Data三個條件(normal principle)
+    *   1.每個變數(variale)都會形成一個column
+    *   2.每個觀察個體(observation)都會形成一個row
+    *   3.每一種類型的觀察個體會形成一個table,比如說:地區特徵跟個體資料應該存成兩個不同的資料表格
+    *   ![image](https://yijinwu1.github.io/R/images/td1.png)    
+<hr/>
+*   tidyr套件 - 將不符合tidy原則的資料集合整理成tidy data
+    ```{r warning=FALSE}
+    # install.packages("tidyverse")
+    library(readr) 
+    library(tidyr)
+    ```
+<hr/>
+*   non-tidy data四種可能性
+    *   Column是值而不是變數 - Gather
+    ```{r warning=FALSE}
+    pew <- read_delim("http://stat405.had.co.nz/data/pew.txt",delim="\t")
+    pew
+    ```
+    *   gather(data,key = "key",value = "value", ...,na.rm = FALSE,convert = FALSE,factor_key = FALSE)
+        *  data：待處理的資料
+        *  key：新變數的欄位名稱
+        *  value：新變數變數值的儲存欄位名稱
+        *  ...：要被蒐集起來變成新變數的 columns
+        *  na.rm：是否刪除遺失值資料
+        *  convert：轉換特殊格式  
+        ```{r warning=FALSE} 
+        # Get column name
+        pew.colnames <- colnames(pew)
+        
+        pew.new <- pew %>%
+          gather(key="income",
+                 value="cases",
+                 pew.colnames[2:ncol(pew)])
+        pew.new         
+        ```
+    *   把變數當成值 - spread    
+        ```{r warning=FALSE} 
+        table2
+        ```   
+    *   spread(data,key,value,fill = NA,convert = FALSE,drop = TRUE,sep = NULL)        
+        *  key：要被拆開成variables的column
+        *  sep：如果是NULL，會直接將key的值當成新colmun的名稱，如果輸入其他分隔符號，會回傳：“paste0(key_name,sep,key_value)”。          
+        
+        ```{r warning=FALSE} 
+        table2 %>% 
+          spread(key=type,
+                 value=count,
+                 sep='_')
+        ```  
+    *   多個變數儲存在同一個column中 - separate        
+        ```{r warning=FALSE} 
+        
+        tb <- read_csv("https://raw.githubusercontent.com/yijinwu1/R/master/excel/tb.csv")
+        tb
+        ``` 
+        *  先處理把值存在column
+        ```{r warning=FALSE} 
+        tb.colnames <- colnames(tb)
+        tb.new <- tb %>%
+          gather(key = "type",
+                 value="cases",
+                 tb.colnames[4:ncol(tb)])
+          tb.new
+        ```  
+        *  separate(data,col,into,sep = "[^[:alnum:]]+",remove = TRUE,convert = FALSE,extra = "warn",fill = "warn",...)    
+            *  col：需要被分開column的名稱
+            *  into：分隔成新columns的名稱
+            *  sep：用來分隔欄位的分隔符號，以正規表達式 (regular expression) 表示。        
+        ```{r warning=FALSE} 
+        tb.new %>%
+            separate(col=type,
+                     into=c("gender","age"),
+                     sep="_",
+                     convert=TRUE)
+        ```   
+    *   一個變數被分存在不同 columns 中 - unite
+        ```{r warning=FALSE} 
+        tb <- read_csv("https://raw.githubusercontent.com/yijinwu1/R/master/excel/tb_new.csv")
+        tb
+        ```
+        *  unite(data,col,...,sep = "_",remove = TRUE)
+            *  col：合併完成後的新 column 名稱 
+            *  ...：用來合併的原有 columns 名稱 
+            *  sep：用來分隔欄位的分隔符號，以正規表達式 (regular expression) 表示        
+        ```{r warning=FALSE} 
+        tb %>%
+          unite(col="age",
+                c("age_lb","age_ub"),
+                sep="-")        
+        ```        
