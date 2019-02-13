@@ -1,0 +1,16 @@
+user_id,user_name,gender,age,location,payment
+U0001,David Huang,male,24,Taipei,1
+U0002,His Shen,male,25,Taipei,0
+U0003,Julie Sung,female,37,Hsinchu,0
+U0004,James Hsieh,male,29,Taipei,0
+U0005,Jane Lin,female,18,Miaoli,1
+U0006,Lobelia Wang,female,42,Tainan,1
+U0007,Cindy Kao,female,19,Kaohsiung,0
+U0008,Lucas Yang,male,29,Taipei,0
+U0009,Jason Chen,male,26,Taipei,0
+U0010,Celine Lee,female,25,Yunlin,0
+U0011,Jean Ding,female,28,Tainan,0
+U0012,Eileen Liu,female,33,Kaohsiung,1
+U0013,Joy Chiu,female,36,Taipei,1
+U0014,Ashley Kuo,female,45,Taipei,1
+U0015,Yiwen Yu,male,37,Hsinchu,0
