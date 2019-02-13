@@ -145,15 +145,19 @@ knitr::opts_chunk$set(echo = TRUE)
 *   總結迴歸模型與假說思考的流程
 <table BORDER="2">
   <tr>
-    <td>&nbsp;提出假說</td>	 
+    <td>&nbsp;提出假說</td>
+    <td>&nbsp;</td>
     <td>&nbsp;驗證假說</td>
     <td>&nbsp;</td>
     <td>&nbsp;回答問題</td>
   </tr>
   <tr>
-    <td>&nbsp;從樣本的觀察中，<br>&nbsp;對解釋變數X和目標Y之間的關聯提出假說&nbsp;</td>	 
+    <td>&nbsp;從樣本的觀察中，<br>&nbsp;對解釋變數X和目標Y<br>&nbsp;之間的關聯提出假說&nbsp;</td>
+    <td>&nbsp;←←←&nbsp;<br>&nbsp;未通過</td>
     <td>&nbsp;1.利用最小平方法建立迴歸模型<br>&nbsp;2.檢定變數及模型的解釋能力和統計顯著性&nbsp;</td>
     <td>&nbsp;→→→&nbsp;<br>&nbsp;&nbsp;&nbsp;通過</td>
     <td>&nbsp;解釋力:<br>&nbsp;&nbsp;從係數說明各X對於目標Y的影響&nbsp;&nbsp;<br>&nbsp;預測力:<br>&nbsp;&nbsp;利用模型更準確地預測目標Y值</td>
   </tr>	
 </table>
+&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;<br/>
