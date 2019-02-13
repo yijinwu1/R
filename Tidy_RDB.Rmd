@@ -1,0 +1,163 @@
+---
+title: "Tidy_RDB"
+author: "wuyijin"
+date: "2019年2月14日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+*   Tidy 架構對應到「關聯模型」 (relational model)：
+    *   Tidy 中的變數 (variale) / column ⇒ 關聯模型中稱為 Attribute
+    *   Tidy 中的個體 (observation) / row ⇒ 關聯模型中稱為 Tuple
+    *   Tidy 中的觀察物件形成的 table ⇒ 關聯模型中稱為 Relation
+    ```{r warning=FALSE}
+    # install.packages("tidyverse")
+    library(tidyverse)
+    
+    table.A <- tribble(
+      ~key, ~val_A,
+      1, "a_val_1",
+      2, "a_val_2",
+      3, "a_val_3",
+      4, "a_val_4")
+
+    table.B <- tribble(
+      ~key, ~val_B,
+      1, "b_val_1",
+      2, "b_val_2",
+      5, "b_val_3")
+    ```
+    
+    *   inner join():取兩個資料集合交集的個體進行合併
+    ```{r warning=FALSE}
+    table.A %>% inner_join(table.B)
+    ```
+
+    *   full join():取兩個資料集合的聯集進行合併
+    ```{r warning=FALSE}
+    table.A %>% full_join(table.B)
+    ```
+    
+    *   left join():將 A 集合中的所有個體與 B 集合的變數合併
+    ```{r warning=FALSE}
+    table.A %>% left_join(table.B)
+    ```
+    
+    *   right_join():將 A 集合中的所有出現在 B 集合的個體其變數與 B 集合的變數合併
+    ```{r warning=FALSE}
+    table.A %>% right_join(table.B)
+    ``` 
+    
+    *   一張資料表有重複鍵值
+    ```{r warning=FALSE}
+    table.A <- tribble(
+      ~key, ~val_A, ~foreign_key,
+      "A1", "a_val_1", "B1",
+      "A2", "a_val_2", "B1",
+      "A3", "a_val_3", "B2",
+      "A4", "a_val_4", "B2")
+    
+    table.B <- tribble(
+      ~key, ~val_B,
+      "B1", "b_val_1",
+      "B2", "bb_val_2")
+    
+    table.A %>% 
+      left_join(table.B, by = c("foreign_key" = "key"))
+    ```
+    
+    *   兩張資料表有重複鍵值
+    ```{r warning=FALSE}
+    table.A <- tribble(
+      ~key, ~val_A, ~foreign_key,
+      "A1", "a_val_1", "B1",
+      "A2", "a_val_2", "B1",
+      "A3", "a_val_3", "B2",
+      "A4", "a_val_4", "B2")
+    
+    table.B <- tribble(
+      ~key, ~val_B,
+      "B1", "b_val_1",
+      "B2", "bb_val_2.1",
+      "B2", "bb_val_2.2")
+    
+    table.A %>% 
+      left_join(table.B, by = c("foreign_key" = "key"))
+    ```  
+    
+    *   實戰
+    ```{r warning=FALSE}
+    # watch.table：使用者的觀看內容與行為紀錄
+    watch.table <- read_csv("https://raw.githubusercontent.com/yijinwu1/R/master/excel/watch_table.csv")
+    watch.table 
+    
+    # user.table：使用者的個人資料
+    user.table <- read_csv("https://raw.githubusercontent.com/yijinwu1/R/master/excel/user_table.csv")
+    user.table
+    
+    # drame.table：戲劇的相關資料
+    drama.table <- read_csv("https://raw.githubusercontent.com/yijinwu1/R/master/excel/drama_table.csv")
+    drama.table 
+    
+    ## 3個 Table 整合
+    full.table <- watch.table %>%
+      left_join(user.table, by="user_id") %>%
+      left_join(drama.table, by = "drama_id")
+    full.table 
+    
+    ## 每部劇男性/女性的觀看次數
+    full.table %>% 
+      group_by(drama_id, gender) %>%
+      summarise(view_count = length(watch_id))
+    full.table
+    
+    ## 每部劇男性/女性的觀看人數
+    full.table %>%
+      group_by(drama_id,gender) %>%
+      summarise(user_count = length(unique(user_id)))
+    ```
+   
+    *   semi_join():table.A 篩選出有出現在 table.B 的個體
+    ```{r warning=FALSE}
+    user.table %>%
+      semi_join(watch.table, by = "user_id")
+    user.table
+    
+    ## 注意:如果同時要比對多個資料表的多個欄位時，用 filtering join 會比較好。
+    user.table %>%
+      filter(user_id %in% watch.table$user_id)
+    ```
+    *   anti_join():table.A 篩選出沒出現在 table.B 的個體
+    ```{r warning=FALSE}  
+    user.table %>%
+      anti_join(watch.table, by = "user_id")
+    ```
+    *   集合運算
+    ```{r warning=FALSE}
+    table.A <- tribble(
+      ~var_1, ~var_2,
+      "1-1","1-2",
+      "2-1","2-2",
+      "3-1","3-2-A")
+    
+    table.B <- tribble(
+      ~var_1, ~var_2,
+      "1-1","1-2",
+      "2-1","2-2",
+      "3-1","3-2-B",
+      "5-1","5-2")
+    ```
+    *   intersect(x,y):回傳同時出現在 x 與 y 的觀察個體
+    ```{r warning=FALSE}
+    table.A %>% intersect(table.B)
+    ```
+    *   union(x, y)：回傳有出現在 x 或 y 的觀察個體，且個體 / row 不會重複
+    ```{r warning=FALSE}
+    table.A %>% union(table.B)
+    ```
+    *   setdiff(x, y): 回傳有出現在 x 但沒有出現在 y 的觀察個體
+    ```{r warning=FALSE}
+    table.B %>% setdiff(table.A)
+    ```

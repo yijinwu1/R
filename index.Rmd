@@ -26,6 +26,7 @@ knitr::opts_chunk$set(echo = TRUE)
 - 待續(資料輸入與輸出)
 - <a href="https://yijinwu1.github.io/R/transferTidyData.html" target="_blank">非Tiey Data轉換成Tidy Data</a>
 - <a href="https://yijinwu1.github.io/R/Tidy_dplyr.html" target="_blank">Tidy_dplyr</a>
+- <a href="https://yijinwu1.github.io/R/Tidy_RDB.html" target="_blank">Tidy_RDB</a>
 
 # 模型建構
 - <a href="https://yijinwu1.github.io/R/MultipleRegression.html" target="_blank">多元線性迴歸</a>
