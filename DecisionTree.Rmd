@@ -19,13 +19,13 @@ knitr::opts_chunk$set(echo = TRUE)
   </tr>
   <tr>
     <td ALIGN=center>&nbsp;目的&nbsp;</td>
-    <td ALIGN=left>&nbsp;衡量新納入的變數能不能幫助我們判斷得更清楚，包含分類問題、預測問題等&nbsp;</td>
-    <td ALIGN=left>&nbsp;表達不同針對於判斷目標的貢獻度與關係&nbsp;</td>
+    <td ALIGN=left>&nbsp;衡量新納入的變數能不能幫助我們判斷得更清楚，<br>&nbsp;包含分類問題、預測問題等&nbsp;</td>
+    <td ALIGN=left>&nbsp;表達不同特徵<br>&nbsp;對於判斷目標的貢獻度與關係&nbsp;</td>
   </tr>
   <tr>
     <td ALIGN=center>&nbsp;方法&nbsp;</td>
-    <td ALIGN=left>&nbsp;再引入不同特徵後，計算不確定性，用來衡量是否能判斷得更清楚&nbsp;</td>
-    <td ALIGN=left>&nbsp;進一步將不確定性的過程視覺化&nbsp;</td>
+    <td ALIGN=left>&nbsp;在引入不同特徵後，計算不確定性，<br>&nbsp;用來衡量是否能判斷得更清楚&nbsp;</td>
+    <td ALIGN=left>&nbsp;進一步將不確定性的過程視覺化&nbsp;&nbsp;</td>
   </tr>
   <tr>
     <td ALIGN=center>&nbsp;解決方案&nbsp;</td>
@@ -37,6 +37,7 @@ knitr::opts_chunk$set(echo = TRUE)
 *   吉尼不純度(Gini Imputity)
     * ![image](https://yijinwu1.github.io/R/images/tree1.png)
     * 衡量納入新特徵後，能否降低不確定程度
+    * 衡量一個特徵能不能夠提升判斷得更清楚    
     * 步驟
         * Step1：選取一個或多個特徵，並計算吉尼不純度
         * Step2：和選取前一次的結果做比較
@@ -60,22 +61,18 @@ knitr::opts_chunk$set(echo = TRUE)
   </tr>
   <tr>
     <td ALIGN=center>&nbsp;原理&nbsp;</td>
-    <td ALIGN=left>&nbsp;以判斷結果是否區分清楚，降低不純度，<br>&nbsp;來衡量特徵對於判斷目標的幫助&nbsp;</td>
-    <td ALIGN=left>&nbsp;以資訊的複雜度出發，<br>&nbsp;探討新的特徵能否降低整體複雜度，進而更容易判斷&nbsp;</td>
+    <td ALIGN=left>&nbsp;以判斷結果是否區分清楚，<br>&nbsp;降低不純度，<br>&nbsp;來衡量特徵對於判斷目標的幫助&nbsp;</td>
+    <td ALIGN=left>&nbsp;以資訊的複雜度出發，<br>&nbsp;探討新的特徵能否降低整體複雜度，<br>&nbsp;進而更容易判斷&nbsp;</td>
  </tr>
   <tr>
     <td ALIGN=center>&nbsp;強調&nbsp;</td>
-    <td ALIGN=left>&nbsp;直觀理解判斷結果的&nbsp;</td>
-    <td ALIGN=left>&nbsp;每次結果的資訊複雜度&nbsp;</td>
+    <td ALIGN=left>&nbsp;強調直觀理解判斷結果的&nbsp;</td>
+    <td ALIGN=left>&nbsp;強調每次結果的資訊複雜度<br>&nbsp;資訊增益(Information Gain)度<br>&nbsp;計算這兩個指標的過程中，<br>&nbsp;下降多少不確定性，<br>&nbsp;增加了多少有用的資訊</td>
   </tr>	
   <tr>
     <td ALIGN=center>&nbsp;計算方式&nbsp;</td>
     <td ALIGN=left>&nbsp;<img src="https://yijinwu1.github.io/R/images/tree3.png">&nbsp;</td>
     <td ALIGN=left>&nbsp;<img src="https://yijinwu1.github.io/R/images/tree4.png">&nbsp;</td>
-  </tr>
-  <tr>
-    <td ALIGN=left colspan="3">&nbsp;&nbsp;&nbsp;&nbsp;資訊增益(Information Gain)<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;計算這兩個指標的過程中，下降多少不確定性，增加了多少有用的資訊</td>
   </tr>
 </table>
 <hr/>
@@ -88,8 +85,9 @@ knitr::opts_chunk$set(echo = TRUE)
         * Step3：若新的特徵無法使判斷指標繼續下降，則停止於該節點分岔
         * Step4：衡量整個模型的不確定性或誤差平方，直到無法再降低為止
         * Step5：保留現有結構，做為決策樹模型
-        * ![image](https://yijinwu1.github.io/R/images/tree6.png)
-        * ![image](https://yijinwu1.github.io/R/images/tree7.png)
+    * rpart套件     
+        * R分類樹模型<br>![image](https://yijinwu1.github.io/R/images/tree6.png)
+        * R迴歸數模型<br>![image](https://yijinwu1.github.io/R/images/tree7.png)
 <hr/> 
 *   過度擬合與剪枝
     * 過度擬合(Over-fitting)
