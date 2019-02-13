@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 *   Tidy Data三個條件(normal principle)
-    *   1.每個變數(variale)都會形成一個column
+    *   1.每個變數(variable)都會形成一個column
     *   2.每個觀察個體(observation)都會形成一個row
     *   3.每一種類型的觀察個體會形成一個table,比如說:地區特徵跟個體資料應該存成兩個不同的資料表格
     *   ![image](https://yijinwu1.github.io/R/images/td1.png)    
@@ -24,19 +24,19 @@ knitr::opts_chunk$set(echo = TRUE)
 <hr/>
 *   non-tidy data四種可能性
     *   Column是值而不是變數 - Gather
-    ```{r warning=FALSE}
-    pew <- read_delim("http://stat405.had.co.nz/data/pew.txt",delim="\t")
-    pew
-    ```
+        ```{r warning=FALSE}
+        pew <- read_delim("http://stat405.had.co.nz/data/pew.txt",delim="\t")
+        pew
+        ```
     *   gather(data,key = "key",value = "value", ...,na.rm = FALSE,convert = FALSE,factor_key = FALSE)
         *  data：待處理的資料
         *  key：新變數的欄位名稱
         *  value：新變數變數值的儲存欄位名稱
         *  ...：要被蒐集起來變成新變數的 columns
         *  na.rm：是否刪除遺失值資料
-        *  convert：轉換特殊格式  
+        *  convert：轉換特殊格式
         ```{r warning=FALSE} 
-        # Get column name
+        #Get column name
         pew.colnames <- colnames(pew)
         
         pew.new <- pew %>%
@@ -66,25 +66,25 @@ knitr::opts_chunk$set(echo = TRUE)
         tb
         ``` 
         *  先處理把值存在column
-        ```{r warning=FALSE} 
-        tb.colnames <- colnames(tb)
-        tb.new <- tb %>%
-          gather(key = "type",
-                 value="cases",
-                 tb.colnames[4:ncol(tb)])
-          tb.new
-        ```  
+            ```{r warning=FALSE} 
+            tb.colnames <- colnames(tb)
+            tb.new <- tb %>%
+              gather(key = "type",
+                     value="cases",
+                     tb.colnames[4:ncol(tb)])
+            tb.new
+            ```  
         *  separate(data,col,into,sep = "[^[:alnum:]]+",remove = TRUE,convert = FALSE,extra = "warn",fill = "warn",...)    
             *  col：需要被分開column的名稱
             *  into：分隔成新columns的名稱
             *  sep：用來分隔欄位的分隔符號，以正規表達式 (regular expression) 表示。        
-        ```{r warning=FALSE} 
-        tb.new %>%
-            separate(col=type,
-                     into=c("gender","age"),
-                     sep="_",
-                     convert=TRUE)
-        ```   
+            ```{r warning=FALSE} 
+            tb.new %>%
+              separate(col=type,
+                       into=c("gender","age"),
+                       sep="_",
+                       convert=TRUE)
+            ```   
     *   一個變數被分存在不同 columns 中 - unite
         ```{r warning=FALSE} 
         tb <- read_csv("https://raw.githubusercontent.com/yijinwu1/R/master/excel/tb_new.csv")
