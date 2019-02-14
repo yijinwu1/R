@@ -1,0 +1,65 @@
+---
+title: "Data Table VS Data Frame"
+author: "wuyijin"
+date: "2019年2月14日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*   Data Table VS Data Frame
+    * data.table是data.frame資料框型別的延伸，如要使用必須安裝並載入data.table。
+    * 使用data.table讀取大型資料的速度比使用資料框快上數倍。
+    * 當記憶體空間或效能會造成你的困擾時， data.table 會更適合你。
+    * [參考](https://www.quora.com/Which-is-better-to-use-for-data-manipulation-dplyr-package-or-data-table-library) 
+    * data.table基本語法結構如下：
+        * DT[i,j,by=]
+        * i 觀察值 (Row) 篩選邏輯
+        * j 所需欄位 (Column)
+        * by 分組依據
+        
+    ```{r warning=FALSE}
+    #install.packages("data.table")
+    library(data.table) 
+    
+    theDT <- data.table(A=1:10,B=letters[1:10],C=LETTERS[11:20],D=rep(c("One","Two","Three"),length.out=10))
+    theDT
+    
+    theDT[1:2,]
+    theDT[theDT$A>=7,]
+    theDT[A>=7,]
+    theDT[,list(A,C)]
+    theDT[,c("A","C"),with=FALSE] # 使用字元指定直行名稱，可將 with 引數設為 FALSE的方式
+    theDT[,B]
+    theDT[,"B",with=FALSE] #column name set with=FALSE
+    theDT[,list(B)] # 抓column data 使用的是 list() 
+    
+    setkey(theDT,D) # 對 data.table 增加索引，被指定的欄位會進行排序。setkey([指定的 datatable ], [指定作為索引的欄位])
+    theDT["One",]
+    theDT[c("One","Two"),]
+    
+    library(ggplot2)
+    diamondsDT <- data.table(diamonds)
+    diamondsDT
+    
+    setkey(diamondsDT,cut,color) #J() only for use inside DT[...].
+    diamondsDT[J("Ideal","E"),] 
+    diamondsDT[J("Ideal",c("E","D")),]
+
+    aggregate(price~cut,diamonds,mean)
+    diamondsDT[,list(price=mean(price)),by=cut]
+
+    aggregate(price~color+cut,diamonds,mean)
+    diamondsDT[,list(price=mean(price)),by=list(cut,color)]
+
+    aggregate(cbind(price,carat)~cut,diamonds,mean)
+    diamondsDT[,list(price=mean(price),carat=mean(carat)),by=cut]
+
+    diamondsDT[,list(price=mean(price),carat=mean(carat),caratSum=sum(carat)),by=cut] #more calculate
+
+    aggregate(cbind(price,carat) ~ cut+color,diamonds,mean)
+    diamondsDT[,list(price=mean(price),carat=mean(carat)),by=list(cut,color)]
+    ```
+    

@@ -8,6 +8,7 @@ output: html_document
 *   data frame VS tibble
     * data frame is Base R。
     * tibble 是 R 語言中獨有的資料架構，改善data.frame的缺點，與data.frame有類似的語法，但使用更方便。
+    * tibble 如要使用必須安裝tidyverse並載入tibble。
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
