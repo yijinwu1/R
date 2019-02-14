@@ -11,8 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 *   R 是結合統計分析與繪圖功能的免費開放原始碼軟體
     *   下載
-        *   [下載CRAN](https://cran.r-project.org/)，依作業系統選擇版本 <br> ![image](https://yijinwu1.github.io/R/images/R1.png) <br>
-    ![image](https://yijinwu1.github.io/R/images/R3.png) <br> ![image](https://yijinwu1.github.io/R/images/R4.png)
+        *   [下載CRAN](https://cran.r-project.org/)，依作業系統選擇版本 <br> ![image](https://yijinwu1.github.io/R/images/R1.png)<br>
+    ![image](https://yijinwu1.github.io/R/images/R3.png)<br>![image](https://yijinwu1.github.io/R/images/R4.png)
     *   安裝    
         *   Windows 作業系統的二進位檔案副檔名為 .exe <br> ![image](https://yijinwu1.github.io/R/images/R6.png)
         *   選擇語言 <br> ![image](https://yijinwu1.github.io/R/images/R5.png)
