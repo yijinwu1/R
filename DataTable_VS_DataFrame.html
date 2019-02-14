@@ -195,6 +195,7 @@ $(document).ready(function () {
 <li>Data Table VS Data Frame
 <ul>
 <li>data.table是data.frame資料框型別的延伸，如要使用必須安裝並載入data.table。</li>
+<li>data.table資料為character時不會轉換成factors，可不用設定stringsAsFactors = FALSE’。</li>
 <li>使用data.table讀取大型資料的速度比使用資料框快上數倍。</li>
 <li>當記憶體空間或效能會造成你的困擾時， data.table 會更適合你。</li>
 <li><a href="https://www.quora.com/Which-is-better-to-use-for-data-manipulation-dplyr-package-or-data-table-library">參考</a></li>
@@ -319,33 +320,50 @@ diamondsDT</code></pre>
 ## 53938:  0.70 Very Good     D     SI1  62.8    60  2757 5.66 5.68 3.56
 ## 53939:  0.86   Premium     H     SI2  61.0    58  2757 6.15 6.12 3.74
 ## 53940:  0.75     Ideal     D     SI2  62.2    55  2757 5.83 5.87 3.64</code></pre>
+<pre class="r"><code>head(subset(diamondsDT,clarity=='SI1',select =c('cut','color','clarity','carat','price')),3)</code></pre>
+<pre><code>##          cut color clarity carat price
+## 1:   Premium     E     SI1  0.21   326
+## 2: Very Good     H     SI1  0.26   337
+## 3:      Good     J     SI1  0.30   339</code></pre>
+<pre class="r"><code>head(setorder(diamondsDT,cut,-price),10) #排序</code></pre>
+<pre><code>##     carat  cut color clarity depth table price     x     y    z
+##  1:  2.01 Fair     G     SI1  70.6    64 18574  7.43  6.64 4.69
+##  2:  2.02 Fair     H     VS2  64.5    57 18565  8.00  7.95 5.14
+##  3:  4.50 Fair     J      I1  65.8    58 18531 10.23 10.16 6.72
+##  4:  2.00 Fair     G     VS2  67.6    58 18515  7.65  7.61 5.16
+##  5:  2.51 Fair     H     SI2  64.7    57 18308  8.44  8.50 5.48
+##  6:  3.01 Fair     I     SI2  65.8    56 18242  8.99  8.94 5.90
+##  7:  3.01 Fair     I     SI2  65.8    56 18242  8.99  8.94 5.90
+##  8:  2.32 Fair     H     SI1  62.0    62 18026  8.47  8.31 5.20
+##  9:  5.01 Fair     J      I1  65.5    59 18018 10.74 10.54 6.98
+## 10:  1.93 Fair     F     VS1  58.9    62 17995  8.17  7.97 4.75</code></pre>
 <pre class="r"><code>setkey(diamondsDT,cut,color) #J() only for use inside DT[...].
 diamondsDT[J(&quot;Ideal&quot;,&quot;E&quot;),] </code></pre>
 <pre><code>##       carat   cut color clarity depth table price    x    y    z
-##    1:  0.23 Ideal     E     SI2  61.5    55   326 3.95 3.98 2.43
-##    2:  0.26 Ideal     E    VVS2  62.9    58   554 4.02 4.06 2.54
-##    3:  0.70 Ideal     E     SI1  62.5    57  2757 5.70 5.72 3.57
-##    4:  0.59 Ideal     E    VVS2  62.0    55  2761 5.38 5.43 3.35
-##    5:  0.74 Ideal     E     SI2  62.2    56  2761 5.80 5.84 3.62
+##    1:  1.51 Ideal     E     VS1  61.5    57 18729 7.34 7.40 4.53
+##    2:  1.28 Ideal     E      IF  60.7    57 18700 7.09 6.99 4.27
+##    3:  2.05 Ideal     E     SI1  62.4    57 18193 8.17 8.09 5.08
+##    4:  1.55 Ideal     E    VVS2  62.5    55 18188 7.38 7.40 4.62
+##    5:  2.08 Ideal     E     SI2  60.2    60 18128 8.28 8.32 5.00
 ##   ---                                                           
-## 3899:  0.70 Ideal     E     SI1  61.7    55  2745 5.71 5.74 3.53
-## 3900:  0.51 Ideal     E    VVS1  61.9    54  2745 5.17 5.11 3.18
-## 3901:  0.56 Ideal     E    VVS1  62.1    56  2750 5.28 5.29 3.28
-## 3902:  0.77 Ideal     E     SI2  62.1    56  2753 5.84 5.86 3.63
-## 3903:  0.71 Ideal     E     SI1  61.9    56  2756 5.71 5.73 3.54</code></pre>
+## 3899:  0.30 Ideal     E     SI2  62.0    54   401 4.33 4.35 2.69
+## 3900:  0.30 Ideal     E     SI2  60.9    59   401 4.29 4.32 2.62
+## 3901:  0.20 Ideal     E     VS2  59.7    55   367 3.86 3.84 2.30
+## 3902:  0.20 Ideal     E     VS2  62.2    57   367 3.76 3.73 2.33
+## 3903:  0.23 Ideal     E     SI2  61.5    55   326 3.95 3.98 2.43</code></pre>
 <pre class="r"><code>diamondsDT[J(&quot;Ideal&quot;,c(&quot;E&quot;,&quot;D&quot;)),]</code></pre>
 <pre><code>##       carat   cut color clarity depth table price    x    y    z
-##    1:  0.23 Ideal     E     SI2  61.5    55   326 3.95 3.98 2.43
-##    2:  0.26 Ideal     E    VVS2  62.9    58   554 4.02 4.06 2.54
-##    3:  0.70 Ideal     E     SI1  62.5    57  2757 5.70 5.72 3.57
-##    4:  0.59 Ideal     E    VVS2  62.0    55  2761 5.38 5.43 3.35
-##    5:  0.74 Ideal     E     SI2  62.2    56  2761 5.80 5.84 3.62
+##    1:  1.51 Ideal     E     VS1  61.5    57 18729 7.34 7.40 4.53
+##    2:  1.28 Ideal     E      IF  60.7    57 18700 7.09 6.99 4.27
+##    3:  2.05 Ideal     E     SI1  62.4    57 18193 8.17 8.09 5.08
+##    4:  1.55 Ideal     E    VVS2  62.5    55 18188 7.38 7.40 4.62
+##    5:  2.08 Ideal     E     SI2  60.2    60 18128 8.28 8.32 5.00
 ##   ---                                                           
-## 6733:  0.51 Ideal     D    VVS2  61.7    56  2742 5.16 5.14 3.18
-## 6734:  0.51 Ideal     D    VVS2  61.3    57  2742 5.17 5.14 3.16
-## 6735:  0.81 Ideal     D     SI1  61.5    57  2748 6.00 6.03 3.70
-## 6736:  0.72 Ideal     D     SI1  60.8    57  2757 5.75 5.76 3.50
-## 6737:  0.75 Ideal     D     SI2  62.2    55  2757 5.83 5.87 3.64</code></pre>
+## 6733:  0.30 Ideal     D     SI2  62.0    56   426 4.31 4.34 2.68
+## 6734:  0.30 Ideal     D     SI2  61.1    58   413 4.31 4.33 2.64
+## 6735:  0.34 Ideal     D      I1  62.5    57   413 4.47 4.49 2.80
+## 6736:  0.34 Ideal     D      I1  61.4    55   413 4.50 4.52 2.77
+## 6737:  0.20 Ideal     D     VS2  61.5    57   367 3.81 3.77 2.33</code></pre>
 <pre class="r"><code>aggregate(price~cut,diamonds,mean)</code></pre>
 <pre><code>##         cut    price
 ## 1      Fair 4358.758

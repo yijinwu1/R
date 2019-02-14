@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 *   Data Table VS Data Frame
     * data.table是data.frame資料框型別的延伸，如要使用必須安裝並載入data.table。
+    * data.table資料為character時不會轉換成factors，可不用設定stringsAsFactors = FALSE'。
     * 使用data.table讀取大型資料的速度比使用資料框快上數倍。
     * 當記憶體空間或效能會造成你的困擾時， data.table 會更適合你。
     * [參考](https://www.quora.com/Which-is-better-to-use-for-data-manipulation-dplyr-package-or-data-table-library) 
@@ -43,6 +44,10 @@ knitr::opts_chunk$set(echo = TRUE)
     library(ggplot2)
     diamondsDT <- data.table(diamonds)
     diamondsDT
+    
+    head(subset(diamondsDT,clarity=='SI1',select =c('cut','color','clarity','carat','price')),3)
+    
+    head(setorder(diamondsDT,cut,-price),10) #排序
     
     setkey(diamondsDT,cut,color) #J() only for use inside DT[...].
     diamondsDT[J("Ideal","E"),] 

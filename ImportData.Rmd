@@ -1,0 +1,82 @@
+---
+title: "Import Data"
+author: "wuyijin"
+date: "2019年2月14日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE}
+# install.packages("readr")
+library(readr)
+
+#install.packages("data.table")
+library(data.table)
+```
+
+*   匯入資料
+    *   CSV檔
+    ```{r warning=FALSE}
+    theUrl <- "http://www.jaredlander.com/data/Tomato%20First.csv"
+
+    csv_df <- read.csv(theUrl,skip=1,header = FALSE,
+                       col.names = c('Round','Tomato','Price','Source','Sweet','Acid','Color','Texture','Overall','Avg of Totals','Total of Avg'))
+    csv_df
+    
+    tomato <- read.table (file = theUrl, header = TRUE, sep = ",") #read.table 效能差
+    tomato
+    
+    tomato2 <- read_delim(file=theUrl, delim=',') # big data,no set stringsAsFactors,return tibble
+
+    tomato3 <- fread(input=theUrl, sep=',', header=TRUE) # big data,fast,return data.table。stringsAsFactors:FALSE
+    tomato3
+    ```   
+    *   xls(xlsx)檔
+    ```{r warning=FALSE}
+    #install.packages("readxl")
+    library(readxl)
+    
+    #excel file must be download file,destfile path must be correct
+    download.file(url='http://www.jaredlander.com/data/ExcelExample.xlsx',destfile='../ExcelExample.xlsx',mode='wb')
+
+    #sheets name
+    excel_sheets('../ExcelExample.xlsx') 
+
+    #sheer is number or sheet name
+    totmatoXL <- read_excel('../ExcelExample.xlsx',sheet = 'Wine')
+    totmatoXL
+    ```  
+    *   html檔
+    ```{r warning=FALSE}
+    #install.packages("rvest")
+    library(rvest)
+    
+    ribalta <- read_html('http://www.jaredlander.com/data/ribalta.html')
+
+    #choose ul --> span
+    ribalta %>% html_nodes('ul') %>% html_nodes('span')
+
+    #html class:.XXX, id:#xxx
+    ribalta %>% html_nodes('.street')
+
+    #no html tag
+    ribalta %>% html_nodes('.street') %>% html_text()
+
+    #attributes value
+    ribalta %>% html_nodes('#longitude') %>% html_attr('value')
+
+    #sixth table
+    ribalta %>% html_nodes('table.food-items') %>% magrittr::extract2(5) %>% html_table()
+    ``` 
+    *   jason檔
+    ```{r warning=FALSE}
+    #install.packages("jsonlite")
+    library(jsonlite)
+
+    pizza <- fromJSON('http://www.jaredlander.com/data/PizzaFavorites.json')
+    pizza
+    ```
+    
