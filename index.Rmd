@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # 環境建置
-- 待續(安裝R)
+- <a href="https://yijinwu1.github.io/R/R.html" target="_blank">安裝R</a>
 - 待續(安裝RStudio)
 
 # 語法

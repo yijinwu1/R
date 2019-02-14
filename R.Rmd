@@ -1,0 +1,23 @@
+---
+title: "R"
+author: "wuyijin"
+date: "2019年2月14日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*   R 是結合統計分析與繪圖功能的免費開放原始碼軟體
+    *   下載
+        *   [下載CRAN](https://cran.r-project.org/)，依作業系統選擇版本 <br> ![image](https://yijinwu1.github.io/R/images/R1.png) <br>
+    ![image](https://yijinwu1.github.io/R/images/R3.png) <br> ![image](https://yijinwu1.github.io/R/images/R4.png)
+    *   安裝    
+        *   Windows 作業系統的二進位檔案副檔名為 .exe <br> ![image](https://yijinwu1.github.io/R/images/R6.png)
+        *   選擇語言 <br> ![image](https://yijinwu1.github.io/R/images/R5.png)
+        *   選擇安裝路徑(勿安裝在Program Files底下!) <br> ![image](https://yijinwu1.github.io/R/images/R7.png)
+        *   選擇元件，Windows 作業系統且電腦為 64 位元的使用者可以選擇不安裝 32 位元的檔案。<br> ![image](https://yijinwu1.github.io/R/images/R2.png)
+        *   安裝完成!        
+    
+    
