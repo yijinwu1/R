@@ -18,5 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
         *  安裝完成!
     *   環境設定
         * 設定工作路徑(亦可使用指令 setwd("~/xxxx")) <br> ![image](https://yijinwu1.github.io/R/images/rs4.png)
+        * 設定R版本(有多套R版本時可指定) <br> ![image](https://yijinwu1.github.io/R/images/rs7.png)        
         * 設定存檔 <br>(Default text encoding:UTF-8，中文編碼適用) ![image](https://yijinwu1.github.io/R/images/rs5.png)
-        * 設定Package CRAN mirrow(指定TAIWAN) <br> ![image](https://yijinwu1.github.io/R/images/rs6.png)        
+        * 設定Package CRAN mirrow(指定TAIWAN) <br> ![image](https://yijinwu1.github.io/R/images/rs6.png)  
+        * 安裝套件(亦可指令install.packages("[指定的套件名稱]")，套件有使用在安裝即可) <br> ![image](https://yijinwu1.github.io/R/images/rs8.png) 
