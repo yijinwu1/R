@@ -1,0 +1,22 @@
+---
+title: "RStudio"
+author: "wuyijin"
+date: "2019年2月14日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*   RStudio 是編寫 R 程式時候使用體驗更好的整合開發環境（Integrated Development Environment，IDE。）
+    *   下載
+        *   [下載RStudio](https://www.rstudio.com/products/rstudio/download/)，依作業系統選擇版本 <br> ![image](https://yijinwu1.github.io/R/images/rs1.png)
+    *   安裝
+        *  執行 .exe <br> ![image](https://yijinwu1.github.io/R/images/rs2.png) 
+        *  選擇安裝路徑(勿安裝在Program Files底下!) <br> ![image](https://yijinwu1.github.io/R/images/rs3.png)
+        *  安裝完成!
+    *   環境設定
+        * 設定工作路徑(亦可使用指令 setwd("~/xxxx")) <br> ![image](https://yijinwu1.github.io/R/images/rs4.png)
+        * 設定存檔 <br>(Default text encoding:UTF-8，中文編碼適用) ![image](https://yijinwu1.github.io/R/images/rs5.png)
+        * 設定Package CRAN mirrow(指定TAIWAN) <br> ![image](https://yijinwu1.github.io/R/images/rs6.png)        

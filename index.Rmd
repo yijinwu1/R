@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # 環境建置
 - <a href="https://yijinwu1.github.io/R/R.html" target="_blank">安裝R</a>
-- 待續(安裝RStudio)
+- <a href="https://yijinwu1.github.io/R/RStudio.html" target="_blank">安裝RStudio</a>
 
 # 語法
 - 待續(基本資料型態)
