@@ -15,11 +15,12 @@ knitr::opts_chunk$set(echo = TRUE)
 - <a href="https://yijinwu1.github.io/R/RStudio.html" target="_blank">安裝RStudio</a>
 
 ### 語法
-- 待續(基本資料型態)
+- 待續(R資料型別)
 - <a href="https://yijinwu1.github.io/R/DataStructures.html" target="_blank">R三大資料結構</a>
 - <a href="https://yijinwu1.github.io/R/Operator.html" target="_blank">R運算子</a>
-- 待續(套件與函式)
-- <a href="https://yijinwu1.github.io/R/ControlSturcture.html" target="_blank">流程控制</a>
+- 待續(R套件)
+- 待續(R函式)
+- <a href="https://yijinwu1.github.io/R/ControlSturcture.html" target="_blank">R流程控制</a>
 
 ### 資料處理
 - <a href="https://yijinwu1.github.io/R/DataTable_VS_DataFrame.html" target="_blank">Data Table VS Data Frame</a>
