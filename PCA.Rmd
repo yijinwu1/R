@@ -1,0 +1,208 @@
+---
+title: "主成份分析"
+author: "wuyijin"
+date: "2019年2月17日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*   主成分分析（英語：Principal components analysis，PCA）是一種分析、簡化數據集的技術。將許多高度相關的變數，化簡成比較少的變數(降維)，以了解資料的重要特性。
+*   求主成分和主成分得分
+    *   步驟一：變數標準化(分數正規化：(值 - 平均值 / 標準差))
+    *   步驟二：利用標準化變數估計主成份分析的參數並得到主成份分數 
+*   確認分析結果的準確度
+    *  步驟一：透過「係數/權重矩陣」了解每一個主成份的意義
+        *  熱圖(Hearmap)視覺化權重矩陣 
+        *  點狀圖(Dotchart)視覺化PC的權重
+    *  步驟二：利用「解釋變異量」決定要保留多少主成份
+        *   主成份變異數條狀圖(第i主成份解釋比率 = 第i主成份解釋變異量 / 資料的總變異量)。超過平均值、特定轉折處
+        *   累積解釋圖。解釋超過80%
+*   研究分析結果    
+<hr/>
+*   載入套件
+    ```{r warning=FALSE}
+    library(tidyverse)
+    library(reshape2)
+    library(plotly)
+    
+    library(nsprcomp)
+    library(ggfortify)
+    ```
+    
+*   準備資料 - USArrests(Violent Crime Rates by US State)
+    *   Murder：numeric	Murder arrests (per 100,000)
+    *   Assault：numeric	Assault arrests (per 100,000)
+    *   UrbanPop：numeric	Percent urban population
+    *   Rape：numeric	Rape arrests (per 100,000)
+    ```{r warning=FALSE}
+    head(USArrests,5)
+    ```
+*   R的主成份分析套件：prcomp() - scale = TRUE:變數標準化
+    ```{r warning=FALSE}
+    pca.model <- prcomp(USArrests,scale=TRUE)
+    pca.model
+    ``` 
+*   pca model：   
+    *   sdev:表示每個主成分的標準差。
+    *   rotation:每個主成分的負荷向量(loading vector)，R預設特徵向量指向負向。
+    *   center, scale:每一個主成分在資料標準化前的平均數與標準差。
+    *   x: 每個國家店在各成分的得分
+    ```{r warning=FALSE}
+    names(pca.model)
+    ```     
+*    選擇多少個主成份 - 累積解釋比率圖
+    ```{r warning=FALSE}
+    var.exp <- tibble(
+      #各主成分名稱
+      pc = paste0("PC_",format(1:4,width=2,flag=0)),
+      #求出每個主成份的特徵值(也就是variance = std^2)
+      var = pca.model$sdev^2,
+      #計算每個主成分的解釋比例 = 各個主成份的特徵值/總特徵值
+      prop = var / sum(var),
+      #累加每個主成份的解釋比例(aggregated effects)
+      cum_prop = cumsum(prop)
+    )
+    ```    
+    *   條狀圖
+    ```{r warning=FALSE}
+    plot_ly(
+      x = var.exp$pc,
+      y = var.exp$var,
+      type = "bar"
+    ) %>%
+      layout(
+        titl = "Variance Explained by Each Principal Component",
+        xaxis = list(type = 'Principal Component', tickangle = -60),
+        yaxis = list(title = 'Variance'),
+        margin = list(r = 30, t = 50, b = 70, l = 50)
+      )
+    ```    
+    *   累積比率圖(資料總變異量超過80%)
+    ```{r warning=FALSE}
+    plot_ly(
+      x = var.exp$pc,
+      y = var.exp$cum_prop,
+      type = "bar"
+    ) %>%
+      layout(
+        titl = "Cumulative Proportion by Each Principal Component",
+        xaxis = list(type = 'Principal Component', tickangle = -60),
+        yaxis = list(title = 'Proportion'),
+        margin = list(r = 30, t = 50, b = 70, l = 50)
+      )
+    ```
+    *   主成份係數矩陣(依上述，取前2個主成份)
+    ```{r warning=FALSE}
+      ggplot(melt(pca.model$rotation[,1:2]),aes(Var2, Var1)) + 
+        geom_tile(aes(fill = value), colour = "white") + 
+        scale_fill_gradient2(low = "firebrick4", high = "steelblue", mid = "white", midpoint = 0) +
+        guides(fill=guide_legend(title="Correlation")) + 
+        theme_bw() + 
+        theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+              axis.title = element_blank())      
+    ```
+    *   關係有負數，轉成非負稀疏主成份     
+<hr/>
+*   R的非負稀疏主成份分析套件：nsprcomp() - k = 非0係數個數(每個主成份期待非0係數個數*變數個數)，nneg = TRUE(是否希望所有係數都非負)
+    ```{r warning=FALSE}
+    nspca.model <- nsprcomp(USArrests, k=20, nneg=TRUE, scale=TRUE)
+    nspca.model
+    ```    
+*    選擇多少個主成份 - 累積解釋比率圖
+    ```{r warning=FALSE}
+    var.exp <- tibble(
+      #各主成分名稱
+      pc = paste0("PC_",format(1:4,width=2,flag=0)),
+      #求出每個主成份的特徵值(也就是variance = std^2)
+      var = nspca.model$sdev^2,
+      #計算每個主成分的解釋比例 = 各個主成份的特徵值/總特徵值
+      prop = var / sum(var),
+      #累加每個主成份的解釋比例(aggregated effects)
+      cum_prop = cumsum(prop)
+    )
+    ```    
+    *   條狀圖
+    ```{r warning=FALSE}
+    plot_ly(
+      x = var.exp$pc,
+      y = var.exp$var,
+      type = "bar"
+    ) %>%
+      layout(
+        titl = "Variance Explained by Each Principal Component",
+        xaxis = list(type = 'Principal Component', tickangle = -60),
+        yaxis = list(title = 'Variance'),
+        margin = list(r = 30, t = 50, b = 70, l = 50)
+      )
+    ```    
+    *   累積比率圖(資料總變異量超過80%)
+    ```{r warning=FALSE}
+    plot_ly(
+      x = var.exp$pc,
+      y = var.exp$cum_prop,
+      type = "bar"
+    ) %>%
+      layout(
+        titl = "Cumulative Proportion by Each Principal Component",
+        xaxis = list(type = 'Principal Component', tickangle = -60),
+        yaxis = list(title = 'Proportion'),
+        margin = list(r = 30, t = 50, b = 70, l = 50)
+      )
+    ```     
+    *   主成份係數矩陣(依上述，取前2個主成份)
+    ```{r warning=FALSE}
+      ggplot(melt(nspca.model$rotation[,1:2]),aes(Var2, Var1)) + 
+        geom_tile(aes(fill = value), colour = "white") + 
+        scale_fill_gradient2(low = "firebrick4", high = "steelblue", mid = "white", midpoint = 0) +
+        guides(fill=guide_legend(title="Correlation")) + 
+        theme_bw() + 
+        theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+              axis.title = element_blank())      
+    ```
+*    結論 
+    *   主成分1(PC1): 代表各大犯罪（包含謀殺、突擊、強姦）的犯罪發生率因子。
+    *   主成分2(PC2): 代表為城市化水平因子。
+    *   各國對應的主成分維度繪製成二維的平面圖。  
+    ```{r warning=FALSE} 
+    pca.score <- data.frame(nspca.model$x)
+    
+    plot_ly(
+      x = pca.score[, 1],
+      y = pca.score[, 2],
+      text = row.names(USArrests),
+      type = "scatter",
+      mode = "text"
+      ) %>% layout(
+        title = "PC 1 v.s. PC 2 Score: Scatter Plot",
+        xaxis = list(title = 'Principal Component 1'),
+        yaxis = list(title = 'Principal Component 2'),
+        margin = list(r = 30, t = 50, b = 70, l = 50)
+        )
+    ```
+    *   在PC1重大犯罪率維度上，Florida, Navada, California具有高重大犯罪率，而North Dakota, Vermont的重大犯罪率則較低。
+    *   在PC2都市化程度維度上，Hawaii, New Jersey為高度都市化城市，而North California, Mississippi的都市化程度則較低。
+    *   接近中心點的城市如Indiana, Virginia則表示在兩維度表現皆為平均值。 
+    *   二元圖(個體、變數、主成分關係)
+    ```{r warning=FALSE}
+    PCbiplot <- function(PC, x="PC1", y="PC2", colors=c('black', 'black', 'red', 'red')) {
+      # PC being a prcomp object
+      data <- data.frame(obsnames=row.names(PC$x), PC$x)
+      plot <- ggplot(data, aes_string(x=x, y=y)) + geom_text(alpha=.4, size=3, aes(label=obsnames), color=colors[1])
+     # plot <- plot + geom_hline(aes(0), size=.2) + geom_vline(aes(0), size=.2, color=colors[2])
+      datapc <- data.frame(varnames=rownames(PC$rotation), PC$rotation)
+      mult <- min(
+        (max(data[,y]) - min(data[,y])/(max(datapc[,y])-min(datapc[,y]))),
+        (max(data[,x]) - min(data[,x])/(max(datapc[,x])-min(datapc[,x]))))
+      datapc <- transform(datapc,
+                          v1 = .7 * mult * (get(x)),
+                          v2 = .7 * mult * (get(y)))
+      plot <- plot + coord_equal() + geom_text(data=datapc, aes(x=v1, y=v2, label=varnames), size = 5, vjust=1, color=colors[3])
+      plot <- plot + geom_segment(data=datapc, aes(x=0, y=0, xend=v1, yend=v2), arrow=arrow(length=unit(0.2,"cm")), alpha=0.75, color=colors[4])
+      plot
+      }
+    
+    PCbiplot(nspca.model, colors=c("black", "black", "red", "yellow"))
+    ```

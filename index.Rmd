@@ -30,7 +30,12 @@ knitr::opts_chunk$set(echo = TRUE)
 - <a href="https://yijinwu1.github.io/R/Tidy_dplyr.html" target="_blank">Tidy_dplyr</a>
 - <a href="https://yijinwu1.github.io/R/Tidy_RDB.html" target="_blank">Tidy_RDB</a>
 
+### 資料視覺化
+- 待續(R視覺化)
+
 ### 模型建構
+- <a href="https://yijinwu1.github.io/R/PCA.html" target="_blank">主成份分</a>
+- 待續(集群
 - <a href="https://yijinwu1.github.io/R/MultipleRegression.html" target="_blank">多元線性迴歸</a>
 - <a href="https://yijinwu1.github.io/R/LogitRegression.html" target="_blank">邏輯迴歸</a>
 - <a href="https://yijinwu1.github.io/R/DecisionTree.html" target="_blank">決策樹</a>
