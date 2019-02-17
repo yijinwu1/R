@@ -1,0 +1,24 @@
+---
+title: "R套件"
+author: "wuyijin"
+date: "2019年2月17日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+*   每一個函式都有對應的套件(package)，要使用再安裝。
+*   安裝與匯入套件
+    *   發佈在 CRAN 上
+        *   方法一：用RStudio介面<br>![image](https://yijinwu1.github.io/R/images/rs8.png)
+        *   方法二：用install.packages安裝套件「install.packages("套件名稱",lib = "安裝路徑",repos = "url")」<br>library匯入套件「library(套件名稱)」
+    *   發佈在 Github 上
+        *   步驟一：安裝devtools套件「install.packages("devtools")」<br>匯入devtools套件「library(devtools)」
+        *   步驟二：用install_github安裝GitHub套件「install_github("GitHub套件名稱",repository="github url"")」<br>匯入「library(GitHub套件名稱)」
+    *   匯入指令差別：library 與 require，最大的差別是library 載入的 package 不存在，會發生 error 程式停止，但是 require 不會。
+*   更新套件
+    *   指定更新套件「update.packages("套件名稱")」
+    *   一次更新所有的套件「update.packages(ask = FALSE)」
+*   移除套件  
+    *   用remove.packages安裝套件「remove.packages("套件名稱")」

@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 - 待續(R資料型別)
 - <a href="https://yijinwu1.github.io/R/DataStructures.html" target="_blank">R三大資料結構</a>
 - <a href="https://yijinwu1.github.io/R/Operator.html" target="_blank">R運算子</a>
-- 待續(R套件)
+- <a href="https://yijinwu1.github.io/R/ControlStructure.html" target="_blank">R套件</a>
 - 待續(R函式)
 - <a href="https://yijinwu1.github.io/R/ControlStructure.html" target="_blank">R流程控制</a>
 
