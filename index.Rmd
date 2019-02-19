@@ -26,7 +26,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### 資料前處理
 - <a href="https://yijinwu1.github.io/R/ImportData.html" target="_blank">資料輸入</a>
-- <a href="https://yijinwu1.github.io/R/ImportData.html" target="_blank">資料分組</a>
+- <a href="https://yijinwu1.github.io/R/Frequency.html" target="_blank">資料分組</a>
 - <a href="https://yijinwu1.github.io/R/transferTidyData.html" target="_blank">非Tidy Data轉換成Tidy Data</a>
 - <a href="https://yijinwu1.github.io/R/Tidy_dplyr.html" target="_blank">Tidy_dplyr</a>
 - <a href="https://yijinwu1.github.io/R/Tidy_RDB.html" target="_blank">Tidy_RDB</a>
