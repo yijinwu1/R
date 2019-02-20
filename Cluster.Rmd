@@ -1,0 +1,245 @@
+---
+title: "集群分析"
+author: "wuyijin"
+date: "2019年2月20日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*   集群分析
+    *   辨別觀察值在某些特性上的相似處，並依照這些相似特性，將觀察值分類為不同集群。
+    *   分群屬於「非監督式學習」的演算法
+*   「什麼樣的個體該被分在一個群體中」？
+    *   緊緻性(Compactness)，會希望「個體之間的距離越小越好」，讓群體內部越緊緻越好
+    <table BORDER="2">
+      <tr>
+        <td ALIGN=center>&nbsp;距離指標&nbsp;</td>
+        <td ALIGN=center>&nbsp;歐氏距離&nbsp;</td>
+        <td ALIGN=center>&nbsp;餘弦距離&nbsp;</td>
+      </tr>
+      <tr>
+        <td ALIGN=center>&nbsp;使用場景&nbsp;</td>
+        <td>&nbsp;數值資料&nbsp;</td>
+        <td>&nbsp;類別、二元資料&nbsp;</td>
+      </tr>
+      <tr>
+        <td ALIGN=center>&nbsp;數學原理&nbsp;</td>
+        <td>&nbsp;畢氏定理&nbsp;</td>
+        <td>&nbsp;兩向量間的夾角，<br>&nbsp;夾角越小，距離越接近&nbsp;</td>        
+      </tr>
+      <tr>
+        <td ALIGN=center>&nbsp;方法重點&nbsp;</td>
+        <td>&nbsp;每個特徵間的數值差距&nbsp;</td>
+        <td>&nbsp;有勝於無的二元差距&nbsp;</td>        
+      </tr>
+      <tr>
+        <td ALIGN=center>&nbsp;變數標準化&nbsp;</td> 
+        <td>&nbsp;(變數值-最小值) / (最大值-最小值)&nbsp;</td>
+        <td>&nbsp; 1 和 0&nbsp;</td>         
+      </tr>
+    </table>
+    <hr/>
+    <table BORDER="2">
+      <tr>
+        <td ALIGN=center colspan="2">&nbsp;階層式分群(Hierarchical Clustering)<br>&nbsp;由下而上、由大到小。&nbsp;</td>
+      </tr>
+      <tr>
+        <td ALIGN=center>&nbsp;步驟&nbsp;</td>
+        <td>&nbsp;步驟一：計算距離矩陣<br>
+                             &nbsp;步驟二：每個個體，都是一個群集<br>
+                             &nbsp;步驟三：結合兩個最相似的個體，建立一個群<br>
+                             &nbsp;步驟四：把新建立的群視為新的個體，更新距離矩陣，重複步驟三&nbsp;<br>
+                             &nbsp;步驟五：重複步驟三 & 四，直到只剩下一個群體為止&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td ALIGN=center>&nbsp;場景&nbsp;</td>
+        <td>&nbsp;1.直接觀察個體之間的關聯，也適用於不同種類的距離計算方式&nbsp;<br> 
+            &nbsp;2.視覺化非常方便，利於提出進一步的假說或分析</td>
+      </tr>
+      <tr>
+        <td ALIGN=center>&nbsp;限制&nbsp;</td>
+        <td>&nbsp;1.無法明確得知分群的數量，需要進一步解釋個個變數間的關係<br>
+            &nbsp;2.使用在大量資料中或使得資料點過於雜亂，無法明確辨別&nbsp;</td>            
+      </tr>
+    </table>
+    <hr/>    
+    ```{r warning=FALSE}
+        # 載入套件
+        library(tidyverse)
+        library(reshape2)
+    
+        # 準備資料 - user(玩家基本資料)、GameLog(玩家早中晚遊戲時間(分)與金幣、卡片、鑽石購買金額)
+        UserTable <- read.csv("https://raw.githubusercontent.com/yijinwu1/R/master/excel/user.csv")
+        str(UserTable)
+    
+        GameLog <- read.csv("https://raw.githubusercontent.com/yijinwu1/R/master/excel/Game_Log.csv")
+        str(GameLog)
+    
+        # GameLog每位玩家皆有5筆資料，為方便分析，取每位玩家平均值。
+        GameTable <- GameLog %>%
+        group_by(User_Id) %>%
+        summarise(
+          Min_Aft = mean(Min_Aft),
+          Min_Eve = mean(Min_Eve),
+          Min_Mid = mean(Min_Mid),
+          Buy_Coin = mean(Buy_Coin),
+          Buy_Dia = mean(Buy_Dia),
+          Buy_Car = mean(Buy_Car)
+        ) %>%
+        inner_join(UserTable, by = "User_Id")
+    
+        # 合併後資料集
+        GameTable %>% summary()
+        
+        #資料標準化處理
+        ## 數值欄位進行極值正規化：(v-Min)/(Max-Min)
+        GameTable <- GameTable[,2:7] %>%
+          mutate(
+            Aft = (Min_Aft - min(Min_Aft)) / (max(Min_Aft)-min(Min_Aft)),
+            Eve = (Min_Eve - min(Min_Eve)) / (max(Min_Eve)-min(Min_Eve)),
+            Mid = (Min_Mid - min(Min_Mid)) / (max(Min_Mid)-min(Min_Mid)),
+            Coin = (Buy_Coin - min(Buy_Coin)) / (max(Buy_Coin)-min(Buy_Coin)),
+            Dia = (Buy_Dia - min(Buy_Dia)) / (max(Buy_Dia)-min(Buy_Dia)),
+            Car = (Buy_Car - min(Buy_Car)) / (max(Buy_Car)-min(Buy_Car))
+            ) %>% cbind(
+              GameTable[,c(8,9)] # 8-Identity, 9-Telecom
+              )
+        
+        ## 類別欄位進行 1 和 0 轉換：model.matrix()
+        DummyTable <- model.matrix( ~ Identity + Telecom, data = GameTable)
+        
+        #選取需要分群的資料
+        GameTable <- cbind(
+          GameTable[,-c(1:6,13,14)], #去除不需要的變數
+          DummyTable[,-1])
+        
+        #觀察資料的相關性
+        CorMatrix <- GameTable %>% cor() %>% melt()
+        #繪製相關係數熱密度圖
+        ggplot( data = CorMatrix) + 
+          geom_tile(aes(Var1, Var2,fill = value), colour = "white") + 
+          scale_fill_gradient2(low = "firebrick4", high = "steelblue") +
+          guides(fill=guide_legend(title="Correlation")) +
+          theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1), axis.title = element_blank())
+        
+        set.seed(500) #設定隨機種子，確保每次執行結果都相同
+        #使用dist()，來建立資料之間的「距離矩陣」(Distance Matrix)，判斷資料之間的遠與近
+        Distance <- dist(GameTable, method = "euclidean") # euclidean:歐式距離
+        
+        #hclust():階層分群(single:最近法、complete:最遠法、average:平均法、centroid:中心法ward.D2:華德法)
+        hclust(Distance,method="complete") %>% plot() #資料探索階段，最上面圖示約分3群左右
+    ``` 
+    *   <hr/>
+      <table BORDER="2">
+        <tr>
+          <td ALIGN=center colspan="2">&nbsp;分割式分群(Partitional Clustering)<br>&nbsp;決定K個群，隨機挑選中心，計算WGSS直到最小。&nbsp;</td>
+        </tr>
+          <td ALIGN=center>&nbsp;步驟&nbsp;</td>
+          <td>&nbsp;步驟一：決定K個群體數目，並隨機設置群體中心位置<br>
+                             &nbsp;步驟二：計算個群之間的WGSS<br>
+                             &nbsp;步驟三：將目前的集群中心設置維新的集群中心<br>
+                             &nbsp;步驟四：重複步驟二 & 三&nbsp;<br>
+                             &nbsp;步驟五：直到WGSS無法下降，或群內成員不在更新為止&nbsp;
+          </td>
+        </tr>
+        <tr>
+          <td ALIGN=center>&nbsp;場景&nbsp;</td>
+          <td>&nbsp;1.利用最適化方法找出潛在的集群，方便比較不同群樹間的結果&nbsp;<br> 
+            &nbsp;2..較適用以數值特徵為主的資料集</td>
+        </tr>
+        <tr>
+          <td ALIGN=center>&nbsp;限制&nbsp;</td>
+          <td>&nbsp;1.由於平均的性質，較容易受極端值影響分群結果，每次分群結果也可能不同<br>
+            &nbsp;2.視覺化不易，需要引入主成份分析的概念，也需要進一步的領域知識解釋&nbsp;</td>            
+        </tr>
+      </table>
+      <hr/>       
+    ```{r warning=FALSE}
+      # 依上述階層式結果，進行 Kmeans分群，先分3群。
+      set.seed(500)
+      K <- kmeans(GameTable,3)
+      
+      # K$cluster:分群結果，合併至原資料中
+      ClusterResult <- cbind(GameTable, K$cluster) %>% as.data.frame() 
+      
+      # 處理 K$cluster column name is Cluster
+      colnames(ClusterResult)[ncol(ClusterResult)] <- 'Cluster'
+      
+      #分群結果統計
+      table(ClusterResult$Cluster)
+      
+      #探討個群體間的連續變數分配，將資料轉換成整齊格式
+      ClusterResultForPlot <- ClusterResult %>%
+        gather( key = Continuous_Variable,
+                value = Normalized_Value,
+                -c(IdentityNovice, IdentityVeteran, Telecomother, Cluster)) # 去除不需要gather()的欄位
+      
+      #轉換型態factor
+      ClusterResultForPlot$Continuous_Variable <- ClusterResultForPlot$Continuous_Variable %>% factor( levels = c('Mid','Aft','Eve','Coin','Dia','Car'))
+      
+      #繪圖
+      ggplot(data = ClusterResultForPlot) + 
+        geom_boxplot( aes( x = Continuous_Variable,
+                           y = Normalized_Value),
+                      size = 0.7) + facet_wrap( ~ Cluster)
+      
+      # 觀察，各特徵的分布還是較為發散，再進行一次分群
+      set.seed(500)
+      K <- kmeans(GameTable,4)
+      
+      # K$cluster:分群結果，合併至原資料中
+      ClusterResult <- cbind(GameTable, K$cluster) %>% as.data.frame() 
+      
+      # 處理 K$cluster column name is Cluster
+      colnames(ClusterResult)[ncol(ClusterResult)] <- 'Cluster'
+      
+      #分群結果統計
+      table(ClusterResult$Cluster)
+      
+      #探討個群體間的連續變數分配，將資料轉換成整齊格式
+      ClusterResultForPlot <- ClusterResult %>%
+        gather( key = Continuous_Variable,
+                value = Normalized_Value,
+                -c(IdentityNovice, IdentityVeteran, Telecomother, Cluster)) # 去除不需要gather()的欄位
+      
+      #轉換型態factor
+      ClusterResultForPlot$Continuous_Variable <- ClusterResultForPlot$Continuous_Variable %>% factor( levels = c('Mid','Aft','Eve','Coin','Dia','Car'))
+      
+      #繪圖
+      ggplot(data = ClusterResultForPlot) + 
+        geom_boxplot( aes( x = Continuous_Variable,
+                           y = Normalized_Value),
+                      size = 0.7) + facet_wrap( ~ Cluster)
+      
+      # 觀察，各特徵的分布
+      # 第一群：上線時間多集中於下午，其他行為較不明顯
+      # 第二群：上線時間多集中於晚上，有穩定購買金幣的行為
+      # 第一群：上線時間較分散且較長，有穩定購買卡片的行為
+      # 第一群：上線時間多集中於半夜，有穩定購買鑽石的行為
+      
+      #產生最終分群表
+      GameTableResult <-  GameLog %>%
+        group_by(User_Id) %>%
+        summarise(
+          Min_Aft = mean(Min_Aft),
+          Min_Eve = mean(Min_Eve),
+          Min_Mid = mean(Min_Mid),
+          Buy_Coin = mean(Buy_Coin),
+          Buy_Dia = mean(Buy_Dia),
+          Buy_Car = mean(Buy_Car)
+          ) %>%
+        inner_join(UserTable, by = 'User_Id') %>%
+        cbind( K$cluster) %>% 
+        as.data.frame()
+      
+      colnames(GameTableResult)[ncol(GameTableResult)] <- 'Cluster'
+      
+      # 納入主成分分析的分群結果
+      library(ggfortify)
+      set.seed(500)
+      autoplot(kmeans(GameTable[,1:6], 4), data  = GameTable)
+    ```     
