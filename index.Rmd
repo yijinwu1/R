@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 <hr/>
 ### 環境建置
-- <a href="https://yijinwu1.github.io/R/R.html" target="_blank">安裝R</a>
+- <a href="https://yijinwu1.github.io/R/R.html" target="_blank">安裝CRAN</a>
 - <a href="https://yijinwu1.github.io/R/RStudio.html" target="_blank">安裝RStudio</a>
 
 ### 語法
