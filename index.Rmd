@@ -10,11 +10,11 @@ knitr::opts_chunk$set(echo = TRUE)
 # echo:是否要將程式顯示在文件中(預設為 TRUE)
 ```
 <hr/>
-### 環境建置
+#### 環境建置
 - <a href="https://yijinwu1.github.io/R/R.html" target="_blank">安裝CRAN</a>
 - <a href="https://yijinwu1.github.io/R/RStudio.html" target="_blank">安裝RStudio</a>
 
-### 語法
+#### 語法
 - 待續(R資料型別)
 - <a href="https://yijinwu1.github.io/R/DataStructures.html" target="_blank">R三大資料結構</a>
 - <a href="https://yijinwu1.github.io/R/DataTable_VS_DataFrame.html" target="_blank">Data Table VS Data Frame</a>
@@ -24,19 +24,22 @@ knitr::opts_chunk$set(echo = TRUE)
 - 待續(R函式)
 - <a href="https://yijinwu1.github.io/R/ControlStructure.html" target="_blank">R流程控制</a>
 
-### 資料前處理
+#### 資料前處理
 - <a href="https://yijinwu1.github.io/R/ImportData.html" target="_blank">資料輸入</a>
 - <a href="https://yijinwu1.github.io/R/Frequency.html" target="_blank">資料分組</a>
 - <a href="https://yijinwu1.github.io/R/transferTidyData.html" target="_blank">非Tidy Data轉換成Tidy Data</a>
 - <a href="https://yijinwu1.github.io/R/Tidy_dplyr.html" target="_blank">Tidy_dplyr</a>
 - <a href="https://yijinwu1.github.io/R/Tidy_RDB.html" target="_blank">Tidy_RDB</a>
 
-### 資料視覺化
+#### 資料視覺化
 - 待續(R視覺化)
 
-### 模型建構
+#### 模型建構
 - <a href="https://yijinwu1.github.io/R/PCA.html" target="_blank">主成份分析</a>
 - <a href="https://yijinwu1.github.io/R/Cluster.html" target="_blank">集群分析</a>
 - <a href="https://yijinwu1.github.io/R/MultipleRegression.html" target="_blank">多元線性迴歸</a>
 - <a href="https://yijinwu1.github.io/R/LogitRegression.html" target="_blank">邏輯迴歸</a>
 - <a href="https://yijinwu1.github.io/R/DecisionTree.html" target="_blank">決策樹</a>
+
+#### 參考文件書籍
+- <a href="https://github.com/yijinwu1/R/tree/master/book" target="_blank">文件書籍</a>
