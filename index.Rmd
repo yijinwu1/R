@@ -38,6 +38,7 @@ knitr::opts_chunk$set(echo = TRUE)
 - <a href="https://yijinwu1.github.io/R/Correlation.html" target="_blank">相關分析</a>
 - <a href="https://yijinwu1.github.io/R/PCA.html" target="_blank">主成份分析</a>
 - <a href="https://yijinwu1.github.io/R/Cluster.html" target="_blank">集群分析</a>
+- <a href="https://yijinwu1.github.io/R/LinearRegression.html" target="_blank">簡單線性迴歸</a>
 - <a href="https://yijinwu1.github.io/R/MultipleRegression.html" target="_blank">多元線性迴歸</a>
 - <a href="https://yijinwu1.github.io/R/LogitRegression.html" target="_blank">邏輯迴歸</a>
 - <a href="https://yijinwu1.github.io/R/DecisionTree.html" target="_blank">決策樹</a>

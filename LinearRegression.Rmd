@@ -1,0 +1,41 @@
+---
+title: "簡單線性迴歸"
+author: "wuyijin"
+date: "2019年2月25日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*   線性迴歸分析
+    *   利用自變數X所挑選出的值，估計應變數Y值，這樣建構方程式的方法稱為迴歸分析
+    *   定義兩變數間線性關係的方程式稱為迴歸方程式
+    *   公式：Y = a + bX (a-截距、b-斜率)   
+    *   須滿足下列假設條件
+        *   􀂅每個X值都會有其對應的一群Y值，且這些Y值服從常態分配
+        *   這些常態分配的平均數皆落在迴歸線上
+        *   這些常態分配的標準差皆相同
+        *   􀂅Y值間相互獨立，亦即選取一特定X值作為樣本時，與其他X的值並無相關
+    *   準備資料 - ad.csv(最近四個月廣告支出與銷售收異的資料(以
+百萬美元為單位))
+        *   month：月份
+        *   out：廣告支出
+        *   inprice：銷售收異
+    ```{r warning=FALSE}
+        ad <- read.csv("https://raw.githubusercontent.com/yijinwu1/R/master/excel/ad.csv")
+        str(ad)
+        
+        #計算回歸方程式
+        model.lm <- lm(inprice ~ out, data=ad)
+        summary(model.lm)
+        
+        #得出公式: Y = 1.5 + 2.2X
+        
+        #估計3百萬美元廣告支出下的銷售收益
+        newdata <- data.frame(out=1)
+        pr <- predict(model.lm,newdata)
+        pr
+        # 估計3百萬美元廣告支出下的銷售收益為 8.1
+    ```
