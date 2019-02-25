@@ -1,0 +1,66 @@
+---
+title: "相關分析"
+author: "wuyijin"
+date: "2019年2月25日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*   相關分析
+    *   測量兩個變數間關係強弱的方法
+    *   說明兩變數之間關係或關聯的強度與方
+向，但不能以此說明兩變數有因果關係(一個變數引起
+另一個變數的變化)    
+    *   準備資料 - ad.csv(最近四個月廣告支出與銷售收異的資料(以
+百萬美元為單位))
+        *   month：月份
+        *   out：廣告支出
+        *   inprice：銷售收異
+    ```{r warning=FALSE}
+        ad <- read.csv("https://raw.githubusercontent.com/yijinwu1/R/master/excel/ad.csv")
+        str(ad)
+    ```
+    *   繪製散佈圖(scatter diagram)呈現，水平軸(X-自變數)、垂直軸(Y-應變數)。標示出數軸的值域範圍。  
+    ```{r warning=FALSE}
+      plot(ad$out,ad$inprice)
+    ```    
+    *   相關係數(coefficient of correlation)
+        *   由Pearson所創建，用於描述兩組數值變數
+(區間尺度或比例尺度)間關係的強度，一般用r來表
+示。
+        *   相關係數的範圍在-1與1之間
+        *   正負符號代表變數間關係的方向。正稱為正相關，表
+示兩變數的關係是正向的(自變數大(小)應變數就大
+(小))；負則稱為負相關，意指兩變數的關係是反向的
+(自變數大(小)應變數就小(大))
+        *   數值大小則為相關性的強弱。當數值越接近1，表示相
+關性越高；若數值越接近0，則相關性越低
+    ```{r warning=FALSE}
+      library("tidyverse")
+      library(reshape2)
+      
+      #相關係數
+      cor(ad)
+    
+      #相關係數熱圖
+      ggplot(melt(cor(ad)), aes(Var1, Var2)) + 
+        geom_tile(aes(fill = value), colour = "white") +
+        scale_fill_gradient2(low = "firebrick4", high = "steelblue", mid = "white", midpoint = 0) +
+        guides(fill=guide_legend(title="Correlation")) +
+        theme_bw() +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+        axis.title = element_blank())    
+      
+      #相關係數r
+      r <- cor(ad$out,ad$inprice)
+      r2 <- r^2
+      r2
+      
+      #相關係數t檢定
+      cor.test(ad$out,ad$inprice)
+      
+      #結論：二者的相關係數為0.9647638，p值為0.03524<0.05。故x和y是有相關性的。
+    ``` 

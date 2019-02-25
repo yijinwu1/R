@@ -35,6 +35,7 @@ knitr::opts_chunk$set(echo = TRUE)
 - 待續(R視覺化)
 
 #### 模型建構
+- <a href="https://yijinwu1.github.io/R/Correlation.html" target="_blank">相關分析</a>
 - <a href="https://yijinwu1.github.io/R/PCA.html" target="_blank">主成份分析</a>
 - <a href="https://yijinwu1.github.io/R/Cluster.html" target="_blank">集群分析</a>
 - <a href="https://yijinwu1.github.io/R/MultipleRegression.html" target="_blank">多元線性迴歸</a>
