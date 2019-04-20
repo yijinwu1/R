@@ -1,0 +1,45 @@
+---
+title: "資料標準化"
+author: "wuyijin"
+date: "2019/4/20"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*   資料標準化
+    *   各個資料的尺度不一致，有數值變數也有類別變數。<br/>
+        各個數值的大小、變異和單位也不完全相同。<br/>
+        為了讓各個變數對於距離計算的影響較一致，對所有變數做標準化。<br/>
+        *   類別變數：轉換為1和0
+        *   數值變數：轉換至「以最大最小值為1和0的尺度中」
+    ```{r warning=FALSE}
+       library(dplyr)
+       
+       #以鳶尾花資料為例，有數值與類別資料
+       summary(iris)
+       
+       # 數值變數 - 極值正規化
+       # V' = (v-Min) / (Max - Min)
+       maxmin <- function(x) (x-min(x))/(max(x)-min(x)) #極值正規化公式
+       Normalize1 <- apply(iris[,1:4], 2, maxmin)
+       colnames(Normalize1) <- c("SLength","SWidth","PLength","PWidth")
+       head(Normalize1,10)
+       
+       # 數值變數 - 分數正規化
+       # V' = (v-平均值) / 標準差
+       Normalize2 <- scale(iris[,1:4])
+       colnames(Normalize2) <- c("SLength-z","SWidth-z","PLength-z","PWidth-z")
+       head(Normalize2,10)
+       
+       # 類別變數 - 轉換為1和0(虛擬變數Dummy Variable)
+       Dummy <- model.matrix( ~ Species, data=iris) # Type:setosa、versicolor、virginica
+       colnames(Dummy) <- c("Intercept","Versicolor","Virginica")
+       head(Dummy,10)
+       
+       #彙整 Table
+       irisTable <- cbind(iris,Normalize1,Dummy[,-1])
+       head(irisTable,10)
+    ```
