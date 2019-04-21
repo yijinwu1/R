@@ -1,0 +1,90 @@
+---
+title: "分類預測 - Knn"
+author: "wuyijin"
+date: "2019/4/21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*   KNN(K最近鄰)
+    *   使用點間的距離為分類標準，當新的觀測值準備預測時，演算法會計算出和她接近最多的類目標點。
+    *   KNN分類法是藉由觀察最鄰近的值作為分類依據，所以各變數比例相對重要。變數標準化。    
+    ```{r warning=FALSE}
+    # 保險數據集。數據集包含1個客戶編號的欄位，4個條件欄位及1個目標欄位。
+    # 1.安裝並載入套件
+    library(readr) #讀csv
+    
+    library(class) #KNN演算法
+    
+    # 2.匯入資料
+    InsuranceData <- read.csv("https://raw.githubusercontent.com/yijinwu1/R/master/excel/InsuPromotion.csv")
+    
+    # 3.數據品質報告
+    # 3.1 數據維度
+    dim(InsuranceData)
+    # 3.2 數據欄位型態
+    str(InsuranceData)
+    # 3.3 是否有缺失值 NA
+    sum(is.na(InsuranceData))
+    # 3.4 是否有空值 NULL
+    sum(is.null(InsuranceData))
+    # 3.5 是否有離群值:平均值+-3 * 標準差
+    # lb <- mean(xxx,na.rm=TRUE)-3*sd(xxx,na.rm = TRUE)
+    # ub <- mean(xxx,na.rm=TRUE)+3*sd(xxx,na.rm = TRUE)
+    # xxx[xxx<lb] <- xxx_lb
+    # xxx[xxx>ub] <- xxx_ub
+    # 3.6 數據資料
+    summary(InsuranceData)
+    
+    # 4.資料清理
+    # 類別變數 - 轉換為1和0(虛擬變數Dummy Variable):CreditCardInsu、Sex資料
+    Dummy <- model.matrix( ~ CreditCardInsu + Sex, data=InsuranceData)
+    Income <- as.numeric(InsuranceData$Income)
+    Age <- as.numeric(InsuranceData$Age)
+    NewInsurance <- cbind(Income,Dummy[,2:3],Age,InsuPromotion=InsuranceData$InsuPromotion)
+    y <- NewInsurance[,c("InsuPromotion")]
+    x <- NewInsurance[,-1]
+    
+    # 5.資料標準化:極值正規化 V' = (v-Min) / (Max - Min)
+    maxmin <- function(x) (x-min(x))/(max(x)-min(x)) #極值正規化公式
+    Normalize <- as.data.frame(apply(NewInsurance, 2, maxmin))
+    Data <- cbind(y,Normalize)
+    str(Data)
+    
+    # 6.切割訓練資料與測試資料
+    set.seed(1111) #設定亂數種子
+    SampleData <- sample(1:nrow(Data),length(Data$y)*0.8)
+    train <- Data[SampleData,-1] #訓練資料
+    test <- Data[-SampleData,-1] #測試資料
+    train.y <- Data[SampleData,1] #訓練資料答案
+    test.y <- Data[-SampleData,1] #測試資料答案
+    
+    # 7.建模:KNN
+    # 計算k值(幾個鄰居)通常可以用資料數的平方根
+    k <- round(sqrt(nrow(Data)))
+    # 選取k值
+    ROC <- data.frame()
+    for (i in seq(from=1,to=nrow(train),by=1))
+    {
+      y_hat <- knn(train,test,cl=train.y,k=i)
+      fuzzy <- table(y_hat,test.y,dnn = c("實際","預測"))
+      accuracy.knn <- sum(diag(fuzzy))/sum(fuzzy)
+      out <- data.frame(i,accuracy.knn)
+      ROC <- rbind(ROC,out)
+    }
+    ROC
+
+    # K=1~3 都是高準確度
+    y_hat <- knn(train,test,cl=train.y,k=3)
+    
+    # 8.評估正確性
+    # 8.1 混亂矩陣
+    fuzzy <- table(y_hat,test.y,dnn = c("實際","預測"))
+    fuzzy
+    # 8.2 準確度
+    accuracy.knn <- sum(diag(fuzzy))/sum(fuzzy) #計算準確率
+    accuracy.knn
+    ```    
