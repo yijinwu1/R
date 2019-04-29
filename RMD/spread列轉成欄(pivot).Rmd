@@ -1,0 +1,49 @@
+---
+title: "spread列轉成欄，類似Excel樞紐分析功能，MS SQL PIVOT"
+author: "wuyijin"
+date: "2019年4月29日"
+output: html_document
+---
+
+*   情境
+    * 檔案WineKMC.xlsx頁籤Transactions，為顧客購買的商品訂單，共有324張訂單。
+    * 欄位:Customer Last Name:顧客名稱、Offer:購買的商品ID。
+*   目標  
+    * 每個品項，顧客購買情形。
+    * 以商品為row，顧客名稱為column。計算交易次數。
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE}
+#載入套件
+library(readxl)
+library(tidyverse)
+
+#載入資料
+download.file(url='https://raw.githubusercontent.com/yijinwu1/R/master/excel/WineKMC.xlsx',destfile='../WineKMC.xlsx',mode='wb')
+Pivot <- read_excel('../WineKMC.xlsx',sheet = 'Transactions',col_names = TRUE)
+
+#查看載入的資料與欄位
+dim(Pivot)
+str(Pivot)
+
+#更改欄位名稱與資料型態
+colnames(Pivot) <- c("Customer","Offer")
+Pivot$Customer <- as.factor(Pivot$Customer) #顧客名稱
+Pivot$Offer <- as.factor(Pivot$Offer) #購買的商品ID
+
+#不重複資料筆數
+unique(Pivot$Offer) # offer:32
+unique(Pivot$Customer) # Customer:100
+
+#以購買的商品ID為row，顧客名稱為column。
+Pivot$cnt <- 1 #增加欄位cnt:購買數量，值全部給1，表示有購買。
+Transactions <- spread(arrange(Pivot,Pivot$Customer), key="Customer",cnt) #依Customer排序，進行資料翻轉。
+dim(Transactions) #驗證 資料共32筆，欄位 1+100(100位顧客名稱)。
+head(Transactions)
+
+filter(Pivot,Customer=="Bell") # 顧客Bell買的品項
+filter(Transactions,Bell==1) %>% select(Offer, Bell) #驗證 顧客Bell買的品項
+```
